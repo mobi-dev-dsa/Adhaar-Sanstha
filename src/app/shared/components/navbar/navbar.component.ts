@@ -9,7 +9,6 @@ import { MenuModule } from 'primeng/menu';
 import { DropdownModule } from 'primeng/dropdown';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { MenuItem } from 'primeng/api';
-import { TranslationLoaderService } from '../../../core/services/TranslationLoaderService';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +18,7 @@ import { TranslationLoaderService } from '../../../core/services/TranslationLoad
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  // currentUser$ = this.supabaseService.getCurrentUser();
+  currentUser$ = this.supabaseService.getCurrentUser();
   languages = [
     { label: 'English', value: 'en' },
     { label: 'हिंदी', value: 'hi' },
@@ -43,72 +42,28 @@ export class NavbarComponent implements OnInit {
     {
       label: 'Sign Out',
       icon: 'pi pi-sign-out',
-      // command: () => this.signOut()
-      command: () => {}
+      command: () => this.signOut()
     }
   ];
 
   constructor(
     private translateService: TranslateService,
-    private translationLoader: TranslationLoaderService,
-
-    // private supabaseService: SupabaseService
+    private supabaseService: SupabaseService
   ) {}
 
   ngOnInit() {
-    const currentLang = this.translateService.currentLang || 'en';
-
     this.selectedLanguage = this.languages.find(lang => 
-      lang.value === currentLang
+      lang.value === this.translateService.currentLang
     ) || this.languages[0];
   }
 
   onLanguageChange(event: any) {
-    if (event && event.value) {
-      const selectedLang = event.value;
-      
-      // Load translation file
-      this.translationLoader.getTranslation(selectedLang).subscribe(
-        (translations) => {
-          // Add translations to the service
-          this.translateService.setTranslation(selectedLang, translations, true);
-          // Switch to the selected language
-          this.translateService.use(selectedLang);
-          this.selectedLanguage = event;
-        },
-        (error) => {
-          console.error('Error loading translation:', error);
-          // Fallback to English
-          this.translateService.use('en');
-          this.selectedLanguage = this.languages[0];
-        }
-      );
-    } else if (event) {
-      // Handle case where event is the selected language object directly
-      const selectedLang = event.value;
-      
-      // Load translation file
-      this.translationLoader.getTranslation(selectedLang).subscribe(
-        (translations) => {
-          // Add translations to the service
-          this.translateService.setTranslation(selectedLang, translations, true);
-          // Switch to the selected language
-          this.translateService.use(selectedLang);
-          this.selectedLanguage = event;
-        },
-        (error) => {
-          console.error('Error loading translation:', error);
-          // Fallback to English
-          this.translateService.use('en');
-          this.selectedLanguage = this.languages[0];
-        }
-      );
-    }
+    this.translateService.use(event.value);
   }
 
-  // async signOut() {
-  //   await this.supabaseService.signOut();
-  // }
+  async signOut() {
+    await this.supabaseService.signOut();
+  }
 
   toggleHighContrast() {
     document.body.classList.toggle('high-contrast');
