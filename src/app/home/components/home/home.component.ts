@@ -14,6 +14,9 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  ngOnInit() {
+    console.log('HomeComponent initialized');
+  }
   heroImages = [
     { src: 'assets/images/hero1.jpg', alt: 'Skill Development' },
     { src: 'assets/images/hero2.jpg', alt: 'Healthcare Support' },

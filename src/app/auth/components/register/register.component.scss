@@ -9,7 +9,7 @@
 
 .register-wrapper {
   width: 100%;
-  max-width: 400px;
+  max-width: 800px;
 }
 
 .register-card {
@@ -27,11 +27,15 @@
 
 .field {
   label {
+    cursor: pointer;
     color: var(--text-color);
+    display: flex;
+    align-items: center;
   }
 }
 
 .p-password {
+  cursor: pointer;
   width: 100%;
   
   ::ng-deep .p-password-input {
@@ -39,10 +43,27 @@
   }
 }
 
+.p-inputtext:enabled:hover, 
+.p-inputtext:enabled:focus {
+  border-color: #6366F1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
 a {
   transition: color 0.3s ease;
   
   &:hover {
-    text-decoration: none;
+    text-decoration: underline;
   }
-} 
+}
+
+// Responsive adjustments
+@media screen and (max-width: 960px) {
+  .register-wrapper {
+    max-width: 100%;
+  }
+  
+  .grid > .col-12 {
+    margin-bottom: 1rem;
+  }
+}

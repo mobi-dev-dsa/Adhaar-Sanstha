@@ -9,54 +9,55 @@
       </ng-template>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-4">
+
+        <!-- Email -->
         <div class="field mb-4">
           <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <input 
-            id="email"
-            type="email" 
-            pInputText 
-            formControlName="email"
-            placeholder="Enter your email"
-            class="w-full"
-            [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          <small 
-            class="text-red-500" 
-            *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <input id="email" type="email" pInputText formControlName="email" placeholder="Enter your email"
+            class="w-full" [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <small class="text-red-500" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
             Please enter a valid email address
           </small>
         </div>
 
-        <div class="field mb-4">
+        <!-- Password -->
+        <div class="block text-sm font-medium mb-2">
           <label for="password" class="block text-sm font-medium mb-2">Password</label>
-          <p-password 
-            id="password"
-            formControlName="password"
-            placeholder="Enter your password"
-            [toggleMask]="true"
-            [feedback]="false"
-            class="w-full">
+          <p-password id="password" formControlName="password" placeholder="Enter your password" [toggleMask]="true"
+            [feedback]="false" class="w-full">
           </p-password>
-          <small 
-            class="text-red-500" 
-            *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <small class="text-red-500" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             Password must be at least 6 characters
           </small>
         </div>
 
-        <p-button 
-          type="submit"
-          label="Sign In"
-          [loading]="loading"
-          [disabled]="loginForm.invalid || loading"
+        <!-- Sign In Button -->
+        <p-button type="submit" label="Sign In" [loading]="loading" [disabled]="loginForm.invalid || loading"
           class="w-full mb-3">
         </p-button>
+
+        <!-- Resend Confirmation Email (shown if login fails due to unconfirmed email) -->
+        <!-- Resend Confirmation Email -->
+        <div class="text-center mt-2" *ngIf="showResendEmail">
+          <p class="text-gray-600">
+            Didn't receive the verification email?
+            <button type="button" class="text-primary font-medium no-underline bg-transparent border-none p-0"
+              (click)="resendConfirmation()" [disabled]="loading || sendingEmail">
+              Resend Verification Email
+            </button>
+          </p>
+
+          <!-- Progress Bar while sending -->
+          <p-progressBar *ngIf="sendingEmail" [mode]="'indeterminate'" styleClass="mt-2"></p-progressBar>
+        </div>
+
 
         <p-divider></p-divider>
 
         <div class="text-center mt-4">
           <p class="text-gray-600">
-            Don't have an account? 
-            <a routerLink="/auth/register" class="text-primary font-medium no-underline">
+            Don't have an account?
+            <a routerLink="/auth/register" class="cursor-pointer text-primary font-medium no-underline">
               Sign up here
             </a>
           </p>
@@ -66,4 +67,4 @@
   </div>
 
   <p-toast></p-toast>
-</div> 
+</div>

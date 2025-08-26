@@ -20,9 +20,10 @@
         <a routerLink="/pwd/register" class="text-white no-underline hover:text-blue-200">
           {{ 'NAV.PWD_REGISTRATION' | translate }}
         </a>
-        <!-- <a routerLink="/admin" class="text-white no-underline hover:text-blue-200" *ngIf="(currentUser$ | async)">
+        <a routerLink="/admin" class="text-white no-underline hover:text-blue-200"
+          *ngIf="(currentUser?.role_name==='admin') ">
           {{ 'NAV.ADMIN' | translate }}
-        </a> -->
+        </a>
       </div>
 
       <!-- Right Side Controls -->
@@ -46,15 +47,15 @@
         </p-dropdown>
 
         <!-- User Menu -->
-        <!-- <div *ngIf="currentUser$ | async as user; else loginButton">
-          <p-button type="button" styleClass="p-button-text text-white" (click)="signOut()">
-            <i class="pi pi-user mr-2"></i>
-            {{ user.email }}
+        <div class="hidden md:flex align-items-center gap-4" *ngIf="currentUser$ | async as user; else loginButton">
+          <!-- here i want to show user name of current logged user -->
+          <span class="mr-2">Hello {{ currentUser?.first_name }} {{currentUser?.last_name}}</span>
+          <p-button label="Sign Out" class=" p-button-outlined p-button-text  text-white" (click)="signOut()">
           </p-button>
-        </div> -->
-
+        </div>
         <ng-template #loginButton>
-          <p-button routerLink="/auth/login" label="{{ 'NAV.LOGIN' | translate }}" styleClass="p-button-outlined">
+          <p-button routerLink="/auth/login" label="{{ 'NAV.LOGIN' | translate }}"
+            class="p-button-outlined p-button-text  text-white">
           </p-button>
         </ng-template>
       </div>
