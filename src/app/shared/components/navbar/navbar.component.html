@@ -47,9 +47,9 @@
         </p-dropdown>
 
         <!-- User Menu -->
-        <div class="hidden md:flex align-items-center gap-4" *ngIf="currentUser$ | async as user; else loginButton">
+        <div class="hidden md:flex align-items-center gap-2" *ngIf="currentUser$ | async as user; else loginButton">
           <!-- here i want to show user name of current logged user -->
-          <span class="mr-2">Hello {{ currentUser?.first_name }} {{currentUser?.last_name}}</span>
+          <span class="">Hello {{ currentUser?.first_name }} {{currentUser?.last_name}}</span>
           <p-button label="Sign Out" class=" p-button-outlined p-button-text  text-white" (click)="signOut()">
           </p-button>
         </div>

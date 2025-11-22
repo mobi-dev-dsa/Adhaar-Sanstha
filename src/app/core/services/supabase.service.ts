@@ -1,47 +1,93 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthChangeEvent,
-  AuthResponse,
-  AuthSession,
-  createClient,
-  Session,
-  SupabaseClient,
-
-} from '@supabase/supabase-js';
-import { environment } from '../../../environments/environment';
+import { AuthResponse, SupabaseClient, } from '@supabase/supabase-js';
 import { BehaviorSubject, catchError, from, map, Observable, of, switchMap, take } from 'rxjs';
 import { Router } from '@angular/router';
 
+// Enhanced interfaces with proper typing
+export enum DisabilityType {
+  VISUAL = 'visual',
+  HEARING = 'hearing',
+  PHYSICAL = 'physical',
+  INTELLECTUAL = 'intellectual',
+  MENTAL_HEALTH = 'mental_health',
+  MULTIPLE = 'multiple',
+  ACID_ATTACK = 'acid_attack',
+  AUTISM = 'autism'
+}
+
+export enum SeverityLevel {
+  MILD = 'mild',
+  MODERATE = 'moderate',
+  SEVERE = 'severe',
+  PROFOUND = 'profound'
+}
+
+export enum DisabilityDueTo {
+  ACCIDENTAL = 'accidental',
+  CONGENITAL = 'congenital',
+  DISEASE = 'disease',
+  INFECTION = 'infection',
+  OTHER = 'other'
+}
+
+export enum EducationLevel {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  HIGHER_SECONDARY = 'higher_secondary',
+  GRADUATE = 'graduate',
+  POST_GRADUATE = 'post_graduate',
+  NONE = 'none'
+}
+
+export interface PersonalInfo {
+  name: string;
+  email: string;
+  phone: string;
+  date_of_birth: string; // ISO format
+  gender: string;
+}
+
+export interface DisabilityInfo {
+  type: DisabilityType;
+  severity: SeverityLevel;
+  disability_percentage: number;
+  // additional fields may be added as needed
+  disability_by_birth: boolean;
+
+}
+
+export interface EducationInfo {
+  level: EducationLevel;
+  institution?: string;
+  year_completed?: string;
+}
+
+export interface AddressInfo {
+  street: string;
+  city: string;
+  state: string;
+  pincode: string;
+}
+
 export interface PWDRegistration {
   id?: string;
-  personal_info: {
-    name: string;
-    email: string;
-    phone: string;
-    date_of_birth: string;
-    gender: string;
-  };
-  disability_info: {
-    type: string;
-    severity: string;
-    diagnosis_date: string;
-  };
-  education: {
-    level: string;
-    institution: string;
-    year_completed: string;
-  };
+  personal_info: PersonalInfo;
+  disability_info: DisabilityInfo;
+  education: EducationInfo;
   skills: string[];
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
+  address: AddressInfo;
   government_id_url?: string;
+  documents?: {
+    aadhar_number?: string;
+    has_uuid?: boolean;
+    uuid_number?: string;
+    uuid_certificate_url?: string;
+    disability_certificate_url?: string;
+  };
   created_at?: string;
   updated_at?: string;
 }
+
 export interface RegisterPayload {
   firstName: string;
   middleName?: string;
@@ -50,6 +96,7 @@ export interface RegisterPayload {
   mobile?: string;
   password: string;
 }
+
 export interface User {
   id: string;
   email?: string;
@@ -63,12 +110,11 @@ export interface User {
   created_at?: string;
   updated_at?: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class SupabaseService {
-  // private sessionTimer: any;
-  // private sessionExpiresIn = new BehaviorSubject<number>(0); // default 0
   private currentUser = new BehaviorSubject<User | null>(null);
 
   constructor(@Inject(SupabaseClient) private supabase: SupabaseClient | null, private router: Router) {
@@ -97,8 +143,6 @@ export class SupabaseService {
       this.currentUser.next(null);
     }
 
-
-
     this.supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         try {
@@ -106,42 +150,33 @@ export class SupabaseService {
           this.currentUser.next(userWithDetails);
         } catch (error) {
           console.error('Error fetching user details in auth state change:', error);
-          // Still set the basic user if details fetch fails
           this.currentUser.next(session.user as unknown as User);
         }
       } else {
         this.currentUser.next(null);
       }
-      // if (this.sessionTimer) {
-      //   clearTimeout(this.sessionTimer);
-      // }
     });
   }
 
-  // Enhanced getCurrentUser method with role details
   getCurrentUser(): Observable<User | null> {
     return this.currentUser.asObservable().pipe(
       switchMap(authUser => {
         if (!authUser) {
           return of(null);
         }
-        // If we already have the extended user data, return it
         if (authUser.first_name && authUser.role_name) {
           return of(authUser);
         }
-        // Otherwise fetch the complete user details
         return from(this.getUserWithRoleDetails(authUser.id)).pipe(
           catchError(error => {
             console.error('Error fetching user details:', error);
-            return of(authUser); // Return basic auth user if details fetch fails
+            return of(authUser);
           })
         );
       })
     );
   }
 
-  // Helper method to get user with role details
-  // Helper method to get user with role details
   private async getUserWithRoleDetails(userId: string): Promise<User | null> {
     try {
       if (!this.supabase) throw new Error('Supabase client not initialized');
@@ -149,9 +184,9 @@ export class SupabaseService {
       const { data, error } = await this.supabase
         .from('pwd_users')
         .select(`
-        *,
-        pwd_roles:role_id (role_name)
-      `)
+          *,
+          pwd_roles:role_id (role_name)
+        `)
         .eq('user_id', userId)
         .maybeSingle();
 
@@ -175,7 +210,7 @@ export class SupabaseService {
         middle_name: data.middle_name || undefined,
         last_name: data.last_name,
         mobile: data.mobile,
-        role_name: data.pwd_roles?.role_name // Access joined role data
+        role_name: data.pwd_roles?.role_name
       };
 
       return userData;
@@ -185,35 +220,32 @@ export class SupabaseService {
     }
   }
 
-  // Check if email is available (not already registered)
   async checkEmailAvailable(email: string): Promise<boolean> {
     try {
-      // Sanitize email
       const cleanEmail = email.trim().toLowerCase();
       if (!this.supabase) {
         console.warn('⚠️ Supabase client not available (SSR mode)');
-        return true; // Don't block registration if Supabase not available
+        return true;
       }
-      // Check if email exists in your users table
+
       const { data, error } = await this.supabase
-        .from('pwd_users') // Replace with your actual table name
+        .from('pwd_users')
         .select('email')
         .eq('email', cleanEmail)
-        .maybeSingle(); // Returns null if no record found
+        .maybeSingle();
 
       if (error) {
         console.error('Error checking email availability:', error);
-        // Don't block registration if check fails - assume email is available
         return true;
       }
 
       return data === null;
     } catch (error) {
       console.error('Exception in checkEmailAvailable:', error);
-      // Don't block registration on error - assume email is available
       return true;
     }
   }
+
   async signOut(redirect = false): Promise<void> {
     if (!this.supabase) {
       console.warn('⚠️ Supabase client not available (SSR mode)');
@@ -223,14 +255,13 @@ export class SupabaseService {
     this.currentUser.next(null);
 
     if (redirect) {
-      this.router.navigate(['/auth/login']); // 👈 redirect to login
+      this.router.navigate(['/auth/login']);
     }
   }
 
   async signUp(payload: RegisterPayload, roleId: number = 2): Promise<AuthResponse> {
     if (!this.supabase) throw new Error('Supabase client is not initialized');
 
-    // Step 1: create auth user
     const { data, error } = await this.supabase.auth.signUp({
       email: payload.email,
       password: payload.password,
@@ -238,11 +269,11 @@ export class SupabaseService {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+
     if (error) throw error;
 
     const user = data.user;
     if (user) {
-      // Step 2: insert profile row in pwd_users
       const { error: insertError } = await this.supabase
         .from('pwd_users')
         .insert({
@@ -253,8 +284,6 @@ export class SupabaseService {
           middle_name: payload.middleName ?? null,
           last_name: payload.lastName,
           mobile: payload.mobile ?? null,
-
-          // created_at / updated_at default via DB
         });
 
       if (insertError) {
@@ -273,12 +302,10 @@ export class SupabaseService {
     return await this.supabase.auth.signInWithPassword({ email, password });
   }
 
-  // Set current user in BehaviorSubject
   setCurrentUser(user: User | null) {
     this.currentUser.next(user);
   }
 
-  // Resend verification email (magic link)
   async resendConfirmation(email: string) {
     if (!this.supabase) throw new Error('Supabase client not initialized');
     const { data, error } = await this.supabase.auth.signInWithOtp({ email });
@@ -300,13 +327,12 @@ export class SupabaseService {
       ))
     );
   }
-  // ===================
-  // Storage methods
-  // ===================
+
   async uploadFile(file: File, path: string): Promise<string> {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized');
     }
+
     const fileName = `${Date.now()}_${file.name}`;
     const { error } = await this.supabase.storage
       .from('pwd-documents')
@@ -321,13 +347,11 @@ export class SupabaseService {
     return data.publicUrl;
   }
 
-  // ===================
-  // Database methods
-  // ===================
   async createPWDRegistration(data: PWDRegistration): Promise<PWDRegistration> {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized');
     }
+
     const { data: result, error } = await this.supabase
       .from('pwd_registrations')
       .insert([data])
@@ -342,6 +366,7 @@ export class SupabaseService {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized');
     }
+
     const { data, error } = await this.supabase
       .from('pwd_registrations')
       .select('*')
@@ -355,6 +380,7 @@ export class SupabaseService {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized');
     }
+
     const { data: result, error } = await this.supabase
       .from('pwd_registrations')
       .update(data)
@@ -370,6 +396,7 @@ export class SupabaseService {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized');
     }
+
     const { error } = await this.supabase
       .from('pwd_registrations')
       .delete()
@@ -377,4 +404,5 @@ export class SupabaseService {
 
     if (error) throw error;
   }
+
 }

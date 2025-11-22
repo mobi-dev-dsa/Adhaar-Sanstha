@@ -52,7 +52,7 @@
               <div class="field">
                 <label for="dob">Date of Birth *</label>
                 <p-calendar id="dob" formControlName="dateOfBirth" [showIcon]="true" dateFormat="dd/mm/yy"
-                  placeholder="Select date of birth">
+                  placeholder="Select valid date of birth">
                 </p-calendar>
                 <small
                   *ngIf="personalInfoForm.get('dateOfBirth')?.invalid && personalInfoForm.get('dateOfBirth')?.touched"
@@ -98,24 +98,53 @@
 
             <div class="col-12 md:col-6">
               <div class="field">
-                <label for="severity">Severity Level *</label>
-                <p-dropdown id="severity" formControlName="severity" [options]="severityLevels"
-                  placeholder="Select severity level">
-                </p-dropdown>
+                <label for="disabilityPercentage">Percentage of Disability (%) *</label>
+                <input id="disabilityPercentage" type="number" formControlName="disabilityPercentage"
+                  placeholder="Enter percentage (0-100)" min="0" max="100" />
                 <small
-                  *ngIf="disabilityInfoForm.get('severity')?.invalid && disabilityInfoForm.get('severity')?.touched"
+                  *ngIf="disabilityInfoForm.get('disabilityPercentage')?.hasError('required') && disabilityInfoForm.get('disabilityPercentage')?.touched"
                   class="p-error">
-                  Severity level is required
+                  Disability percentage is required
+                </small>
+                <small
+                  *ngIf="(disabilityInfoForm.get('disabilityPercentage')?.hasError('min') || disabilityInfoForm.get('disabilityPercentage')?.hasError('max')) && disabilityInfoForm.get('disabilityPercentage')?.touched"
+                  class="p-error">
+                  Percentage must be between 0 and 100
+                </small>
+                <small
+                  *ngIf="disabilityInfoForm.get('disabilityPercentage')?.hasError('pattern') && disabilityInfoForm.get('disabilityPercentage')?.touched"
+                  class="p-error">
+                  Enter a valid numeric percentage
                 </small>
               </div>
             </div>
 
-            <div class="col-12 md:col-6">
+
+
+
+            
+
+            <!-- Disability by Birth Radio Button -->
+            <div class="col-12">
               <div class="field">
-                <label for="diagnosisDate">Diagnosis Date</label>
-                <p-calendar id="diagnosisDate" formControlName="diagnosisDate" [showIcon]="true" dateFormat="dd/mm/yy"
-                  placeholder="Select diagnosis date">
-                </p-calendar>
+                <label>Disability by Birth *</label>
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex align-items-center">
+                    <p-radioButton [value]="true" formControlName="disability_by_birth"
+                      inputId="disability_birth_yes"></p-radioButton>
+                    <label for="disability_birth_yes" class="ml-2">Yes</label>
+                  </div>
+                  <div class="flex align-items-center">
+                    <p-radioButton [value]="false" formControlName="disability_by_birth"
+                      inputId="disability_birth_no"></p-radioButton>
+                    <label for="disability_birth_no" class="ml-2">No</label>
+                  </div>
+                </div>
+                <small
+                  *ngIf="disabilityInfoForm.get('disability_by_birth')?.invalid && disabilityInfoForm.get('disability_by_birth')?.touched"
+                  class="p-error">
+                  Please specify if disability is by birth
+                </small>
               </div>
             </div>
           </div>
@@ -141,20 +170,41 @@
               </div>
             </div>
 
-            <div class="col-12 md:col-6">
+            <!-- Skill development program interest -->
+            <div class="col-12">
               <div class="field">
-                <label for="institution">Institution Name</label>
-                <input id="institution" type="text" formControlName="institution"
-                  placeholder="Enter institution name" />
+                <label>Are you interested in attending our skill development program? *</label>
+                <div class="flex flex-wrap gap-3 mt-2">
+                  <div class="flex align-items-center">
+                    <p-radioButton [value]="true" formControlName="willingForSkillProgram"
+                      inputId="skill_yes"></p-radioButton>
+                    <label for="skill_yes" class="ml-2">Yes</label>
+                  </div>
+                  <div class="flex align-items-center">
+                    <p-radioButton [value]="false" formControlName="willingForSkillProgram"
+                      inputId="skill_no"></p-radioButton>
+                    <label for="skill_no" class="ml-2">No</label>
+                  </div>
+                </div>
+                <small
+                  *ngIf="educationForm.get('willingForSkillProgram')?.invalid && educationForm.get('willingForSkillProgram')?.touched"
+                  class="p-error">
+                  Please indicate if you are interested
+                </small>
               </div>
             </div>
 
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6" *ngIf="educationForm.get('willingForSkillProgram')?.value === true">
               <div class="field">
-                <label for="yearCompleted">Year Completed</label>
-
-                <input id="yearCompleted" formControlName="yearCompleted" placeholder="Enter year completed"/>
-                
+                <label for="skillMode">Preferred Mode *</label>
+                <p-dropdown id="skillMode" formControlName="skillProgramMode" [options]="skillProgramOptions"
+                  placeholder="Select mode">
+                </p-dropdown>
+                <small
+                  *ngIf="educationForm.get('skillProgramMode')?.invalid && educationForm.get('skillProgramMode')?.touched"
+                  class="p-error">
+                  Please select preferred mode
+                </small>
               </div>
             </div>
           </div>
@@ -181,10 +231,10 @@
             </div>
 
             <div class="col-12">
-              <div class="field">
+              <div class="field ">
                 <label for="street">Street Address *</label>
-                <input id="street" formControlName="street" placeholder="Enter street address"/>
-              
+                <textarea id="street" formControlName="street" rows="3" placeholder="Enter street address"></textarea>
+
                 <small *ngIf="skillsAddressForm.get('street')?.invalid && skillsAddressForm.get('street')?.touched"
                   class="p-error">
                   Street address is required
@@ -194,12 +244,21 @@
 
             <div class="col-12 md:col-4">
               <div class="field">
-                <label for="city">City *</label>
-                <input id="city" formControlName="city" placeholder="Enter city"/>
-                
+                <label for="city">Villege/City Name*</label>
+                <input id="city" formControlName="city" placeholder="Enter city" />
                 <small *ngIf="skillsAddressForm.get('city')?.invalid && skillsAddressForm.get('city')?.touched"
                   class="p-error">
                   City is required
+                </small>
+              </div>
+            </div>
+            <div class="col-12 md:col-4">
+              <div class="field">
+                <label for="city">Taluka*</label>
+                <input id="city" formControlName="taluka" placeholder="Enter taluka" />
+                <small *ngIf="skillsAddressForm.get('taluka')?.invalid && skillsAddressForm.get('taluka')?.touched"
+                  class="p-error">
+                  taluka is required
                 </small>
               </div>
             </div>
@@ -219,8 +278,8 @@
             <div class="col-12 md:col-4">
               <div class="field">
                 <label for="pincode">Pincode *</label>
-                <input id="pincode" formControlName="pincode" placeholder="Enter pincode"/>
-             
+                <input id="pincode" formControlName="pincode" placeholder="Enter pincode" />
+
                 <small *ngIf="skillsAddressForm.get('pincode')?.invalid && skillsAddressForm.get('pincode')?.touched"
                   class="p-error">
                   Pincode is required
@@ -236,26 +295,96 @@
     <div *ngIf="currentStep === 4" class="step-content">
       <p-card header="Document Upload">
         <form [formGroup]="documentsForm">
-          <div class="grid">
-            <div class="col-12">
-              <div class="field">
-                <label for="governmentId">Government ID (Aadhar, PAN, etc.) *</label>
-                <p-fileUpload id="governmentId" #fileUpload [customUpload]="true" [multiple]="false"
-                  [maxFileSize]="5000000" accept="image/*,.pdf" [auto]="true" chooseLabel="Choose File"
-                  uploadLabel="Upload" cancelLabel="Cancel" (uploadHandler)="onFileSelect($event)">
-                  <ng-template pTemplate="content">
-                    <ul *ngIf="selectedFile">
-                      <li>{{ selectedFile.name }} - {{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</li>
-                    </ul>
-                  </ng-template>
-                </p-fileUpload>
-                <small *ngIf="documentsForm.get('governmentId')?.invalid && documentsForm.get('governmentId')?.touched"
-                  class="p-error">
-                  Government ID is required
-                </small>
+          <p-accordion>
+            <p-accordionTab header="Aadhar Details">
+              <div class="grid">
+                <div class="col-12 md:col-6">
+                  <div class="field">
+                    <label for="aadharNumber">Aadhar Number (12 digits) *</label>
+                    <input id="aadharNumber" formControlName="aadharNumber" placeholder="Enter 12-digit Aadhar number" maxlength="12" />
+                    <small *ngIf="documentsForm.get('aadharNumber')?.hasError('required') && documentsForm.get('aadharNumber')?.touched" class="p-error">Aadhar number is required</small>
+                    <small *ngIf="documentsForm.get('aadharNumber')?.hasError('pattern') && documentsForm.get('aadharNumber')?.touched" class="p-error">Enter a valid 12-digit Aadhar number</small>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </p-accordionTab>
+
+            <p-accordionTab header="UUID / Disability Certificate">
+              <div class="grid">
+                <div class="col-12">
+                  <div class="field">
+                    <label>Do you have a UUID number? *</label>
+                    <div class="flex gap-3 mt-2">
+                      <div class="flex align-items-center">
+                        <p-radioButton [value]="true" formControlName="hasUUID" inputId="uuid_yes"></p-radioButton>
+                        <label for="uuid_yes" class="ml-2">Yes</label>
+                      </div>
+                      <div class="flex align-items-center">
+                        <p-radioButton [value]="false" formControlName="hasUUID" inputId="uuid_no"></p-radioButton>
+                        <label for="uuid_no" class="ml-2">No</label>
+                      </div>
+                    </div>
+                    <small *ngIf="documentsForm.get('hasUUID')?.invalid && documentsForm.get('hasUUID')?.touched" class="p-error">Please indicate whether you have a UUID</small>
+                  </div>
+                </div>
+
+                <!-- UUID path -->
+                <div class="col-12 md:col-6" *ngIf="documentsForm.get('hasUUID')?.value === true">
+                  <div class="field">
+                    <label for="uuidNumber">UUID Number *</label>
+                    <input id="uuidNumber" formControlName="uuidNumber" placeholder="Enter UUID number" />
+                    <small *ngIf="documentsForm.get('uuidNumber')?.invalid && documentsForm.get('uuidNumber')?.touched" class="p-error">UUID number is required</small>
+                  </div>
+                </div>
+
+                <div class="col-12 md:col-6" *ngIf="documentsForm.get('hasUUID')?.value === true">
+                  <div class="field">
+                    <label for="uuidCertificate">Upload UUID Certificate *</label>
+                    <p-fileUpload id="uuidCertificate" [customUpload]="true" [multiple]="false" [maxFileSize]="5000000" accept="image/*,.pdf" [auto]="true" chooseLabel="Choose File" (uploadHandler)="onFileSelect($event, 'uuid')">
+                      <ng-template pTemplate="content">
+                        <ul *ngIf="selectedUuidFile">
+                          <li>{{ selectedUuidFile.name }} - {{ (selectedUuidFile.size / 1024 / 1024).toFixed(2) }} MB</li>
+                        </ul>
+                      </ng-template>
+                    </p-fileUpload>
+                    <small *ngIf="documentsForm.get('uuidCertificate')?.invalid && documentsForm.get('uuidCertificate')?.touched" class="p-error">UUID certificate is required</small>
+                  </div>
+                </div>
+
+                <!-- Disability certificate path -->
+                <div *ngIf="documentsForm.get('hasUUID')?.value === false" class="col-12">
+                  <div class="field">
+                    <label for="disabilityCertificate">Upload Disability Certificate *</label>
+                    <p-fileUpload id="disabilityCertificate" [customUpload]="true" [multiple]="false" [maxFileSize]="5000000" accept="image/*,.pdf" [auto]="true" chooseLabel="Choose File" (uploadHandler)="onFileSelect($event, 'disability')">
+                      <ng-template pTemplate="content">
+                        <ul *ngIf="selectedDisabilityFile">
+                          <li>{{ selectedDisabilityFile.name }} - {{ (selectedDisabilityFile.size / 1024 / 1024).toFixed(2) }} MB</li>
+                        </ul>
+                      </ng-template>
+                    </p-fileUpload>
+                    <small *ngIf="documentsForm.get('disabilityCertificate')?.invalid && documentsForm.get('disabilityCertificate')?.touched" class="p-error">Disability certificate is required</small>
+                  </div>
+                </div>
+
+                <div *ngIf="documentsForm.get('hasUUID')?.value === false" class="col-12 md:col-6">
+                  <div class="field">
+                    <label for="disabilityCertificateDate">Certificate Date *</label>
+                    <p-calendar id="disabilityCertificateDate" formControlName="disabilityCertificateDate" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                    <small *ngIf="documentsForm.get('disabilityCertificateDate')?.invalid && documentsForm.get('disabilityCertificateDate')?.touched" class="p-error">Please enter certificate date</small>
+                  </div>
+                </div>
+
+                <div *ngIf="documentsForm.get('hasUUID')?.value === false" class="col-12 md:col-6">
+                  <div class="field">
+                    <label for="disabilityCertificateOrg">Issuing Organization *</label>
+                    <input id="disabilityCertificateOrg" formControlName="disabilityCertificateOrg" placeholder="Organization name" />
+                    <small *ngIf="documentsForm.get('disabilityCertificateOrg')?.invalid && documentsForm.get('disabilityCertificateOrg')?.touched" class="p-error">Issuing organization is required</small>
+                  </div>
+                </div>
+
+              </div>
+            </p-accordionTab>
+          </p-accordion>
         </form>
       </p-card>
     </div>
