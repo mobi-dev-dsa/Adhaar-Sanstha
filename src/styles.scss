@@ -9,17 +9,35 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
   font-family: var(--font-family);
   background-color: var(--surface-ground);
   color: var(--text-color);
 }
 
+/* App shell — flex column so navbar + main + footer stack cleanly */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-navbar {
+  flex-shrink: 0;
+}
+
+app-footer {
+  flex-shrink: 0;
+}
+
 .main-content {
-  min-height: calc(100vh - 200px);
-  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Accessibility styles */
@@ -34,15 +52,12 @@ body {
   padding: 0 1rem;
 }
 
-/* Custom utility classes */
 .text-primary {
   color: var(--primary-color);
 }
-
 .text-center {
   text-align: center;
 }
-
 .no-underline {
   text-decoration: none;
 }
@@ -55,13 +70,11 @@ body {
 .field {
   margin-bottom: 1rem;
 }
-
 .field label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
-
 .field input,
 .field select,
 .field textarea {
@@ -71,7 +84,6 @@ body {
   border-radius: 6px;
   font-size: 1rem;
 }
-
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
@@ -92,21 +104,17 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
 }
-
 .btn-primary:hover {
   background-color: var(--primary-600);
 }
-
 .btn-secondary {
   background-color: var(--surface-200);
   color: var(--text-color);
 }
-
 .btn-secondary:hover {
   background-color: var(--surface-300);
 }
@@ -119,13 +127,8 @@ body {
   overflow: hidden;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .container {
     padding: 0 0.5rem;
-  }
-  
-  .main-content {
-    padding: 1rem 0;
   }
 }

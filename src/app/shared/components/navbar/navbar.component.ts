@@ -22,66 +22,73 @@ import { TranslationLoaderService } from '../../../core/services/TranslationLoad
     MenuModule,
     DropdownModule,
     TieredMenuModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
   languages = [
     { label: 'English', value: 'en' },
     { label: 'हिंदी', value: 'hi' },
-    { label: 'मराठी', value: 'mr' }
+    { label: 'मराठी', value: 'mr' },
   ];
   selectedLanguage = { label: 'English', value: 'en' };
   userMenuItems: MenuItem[] = [];
   // Observable of current user (will be null on SSR)
   currentUser$ = this.supabase?.getCurrentUser();
   currentUser: User | null = null;
+  mobileOpen = false;
 
   private isBrowser: boolean;
-
 
   constructor(
     private translateService: TranslateService,
     private translationLoader: TranslationLoaderService,
     private readonly supabase: SupabaseService,
-    @Inject(PLATFORM_ID) platformId: Object
+    @Inject(PLATFORM_ID) platformId: Object,
   ) {
+    console.log('NavbarComponent initialized:', PLATFORM_ID);
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
-    this.currentUser$?.subscribe(user => {
+    this.currentUser$?.subscribe((user) => {
       this.currentUser = user;
       // Update UI based on user state
     });
-    this.translationLoader.getTranslation(this.selectedLanguage.value).subscribe(
-      translations => {
-        this.translateService.setTranslation(this.selectedLanguage.value, translations, true);
+    this.translationLoader
+      .getTranslation(this.selectedLanguage.value)
+      .subscribe((translations) => {
+        this.translateService.setTranslation(
+          this.selectedLanguage.value,
+          translations,
+          true,
+        );
         this.translateService.use(this.selectedLanguage.value);
-
       });
     // Only setup user menu if running in browser
     if (this.isBrowser) {
       this.userMenuItems = [
-        { label: 'Profile', icon: 'pi pi-user', command: () => { } },
-        { label: 'Settings', icon: 'pi pi-cog', command: () => { } },
+        { label: 'Profile', icon: 'pi pi-user', command: () => {} },
+        { label: 'Settings', icon: 'pi pi-cog', command: () => {} },
         { separator: true },
         {
           label: 'Sign Out',
           icon: 'pi pi-sign-out',
-          command: () => this.signOut()
-        }
+          command: () => this.signOut(),
+        },
       ];
     }
     console.log(this.currentUser$);
-    debugger
+    // debugger
   }
 
   formatTime(seconds: number | null): string {
     if (!seconds || seconds <= 0) return '00:00';
-    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   }
@@ -89,16 +96,16 @@ export class NavbarComponent implements OnInit {
   onLanguageChange(event: any) {
     const selectedLang = event?.value ?? event?.value?.value ?? 'en';
     this.translationLoader.getTranslation(selectedLang).subscribe(
-      translations => {
+      (translations) => {
         this.translateService.setTranslation(selectedLang, translations, true);
         this.translateService.use(selectedLang);
         this.selectedLanguage = event;
       },
-      error => {
+      (error) => {
         console.error('Error loading translation:', error);
         this.translateService.use('en');
         this.selectedLanguage = this.languages[0];
-      }
+      },
     );
   }
 

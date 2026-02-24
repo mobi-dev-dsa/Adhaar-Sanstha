@@ -1,75 +1,110 @@
 <div class="home-container">
-  <!-- Hero Section -->
-  <section class="hero-section">
+
+  <!-- ── Hero ── -->
+  <section class="hero-section" aria-labelledby="hero-heading">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-blob blob-a"></div>
+      <div class="hero-blob blob-b"></div>
+      <div class="hero-dots"></div>
+    </div>
     <div class="container">
-      <div class="hero-content text-center">
-        <h1 class="hero-title">{{ 'HOME.HERO_TITLE' | translate }}</h1>
+      <div class="hero-content">
+        <div class="hero-badge" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Aadhar Sanstha
+        </div>
+        <h1 id="hero-heading" class="hero-title">{{ 'HOME.HERO_TITLE' | translate }}</h1>
         <p class="hero-subtitle">{{ 'HOME.HERO_SUBTITLE' | translate }}</p>
         <div class="hero-buttons">
-          <p-button 
-            routerLink="/pwd/register" 
-            label="{{ 'HOME.GET_STARTED' | translate }}"
-            size="large">
-          </p-button>
-          <p-button 
-            routerLink="/programs" 
-            label="{{ 'HOME.LEARN_MORE' | translate }}"
-            styleClass="p-button-outlined"
-            size="large">
-          </p-button>
+          <a href="/pwd/register" routerLink="/pwd/register" class="btn-primary-hero">
+            {{ 'HOME.GET_STARTED' | translate }}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/programs" routerLink="/programs" class="btn-outline-hero">
+            {{ 'HOME.LEARN_MORE' | translate }}
+          </a>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="features-section">
-    <div class="container">
-      <h2 class="section-title text-center">Our Services</h2>
-      <div class="grid">
-        <div class="col-12 md:col-6 lg:col-3" *ngFor="let feature of features">
-          <p-card styleClass="feature-card">
-            <ng-template pTemplate="header">
-              <div class="feature-icon">
-                <i [class]="feature.icon"></i>
-              </div>
-            </ng-template>
-            <ng-template pTemplate="content">
-              <h3 class="feature-title">{{ feature.title }}</h3>
-              <p class="feature-description">{{ feature.description }}</p>
-            </ng-template>
-          </p-card>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Section -->
-  <section class="stats-section">
-    <div class="container">
-      <div class="grid">
-        <div class="col-12 md:col-3" *ngFor="let stat of stats">
-          <div class="stat-item text-center">
-            <div class="stat-number">{{ stat.number }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
+        <!-- Trust indicators -->
+        <div class="hero-trust" aria-label="Trust indicators">
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Government Registered
+          </div>
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Free of Cost
+          </div>
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Pan-India Support
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
+  <!-- ── Features ── -->
+  <section class="features-section" aria-labelledby="features-heading">
     <div class="container">
-      <div class="cta-content text-center">
-        <h2>Ready to Get Started?</h2>
-        <p>Join our community and access comprehensive support for persons with disabilities.</p>
-        <p-button 
-          routerLink="/pwd/register" 
-          label="Register Now"
-          size="large">
-        </p-button>
+      <div class="section-header">
+        <span class="section-tag">What We Offer</span>
+        <h2 id="features-heading" class="section-title">Our Services</h2>
+        <p class="section-subtitle">Comprehensive support designed around the needs of every individual</p>
+      </div>
+      <div class="features-grid">
+        <article class="feature-card" *ngFor="let feature of features; let i = index"
+          [style.animation-delay]="i * 0.08 + 's'">
+          <div class="feature-icon-wrap" aria-hidden="true">
+            <i [class]="feature.icon"></i>
+          </div>
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-description">{{ feature.description }}</p>
+          <div class="feature-arrow" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </article>
       </div>
     </div>
   </section>
-</div> 
+
+  <!-- ── Stats ── -->
+  <section class="stats-section" aria-labelledby="stats-heading">
+    <div class="container">
+      <h2 id="stats-heading" class="sr-only">Our Impact</h2>
+      <div class="stats-grid">
+        <div class="stat-item" *ngFor="let stat of stats; let i = index"
+          [style.animation-delay]="i * 0.1 + 's'">
+          <div class="stat-number" [attr.aria-label]="stat.number + ' ' + stat.label">{{ stat.number }}</div>
+          <div class="stat-label" aria-hidden="true">{{ stat.label }}</div>
+          <div class="stat-line" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-section" aria-labelledby="cta-heading">
+    <div class="cta-bg" aria-hidden="true">
+      <div class="cta-blob blob-c"></div>
+      <div class="cta-blob blob-d"></div>
+    </div>
+    <div class="container">
+      <div class="cta-content">
+        <div class="cta-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h2 id="cta-heading" class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-subtitle">Join our community and access comprehensive support for persons with disabilities. Registration is free and takes less than 2 minutes.</p>
+        <a href="/auth/register" routerLink="/auth/register" class="btn-primary-hero">
+          Register Now — It's Free
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="cta-note">
+          Already registered?
+          <a href="/auth/login" routerLink="/auth/login" class="cta-link">Sign in here</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>

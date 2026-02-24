@@ -1,7 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { MessageService } from 'primeng/api';
@@ -33,11 +40,12 @@ interface UserRegistrationData {
     ButtonModule,
     CardModule,
     ToastModule,
-    DividerModule
+    DividerModule,
+    RouterModule,
   ],
   providers: [MessageService],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
@@ -51,8 +59,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private router: Router,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+  ) {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -67,9 +75,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private initializeForm(): void {
     this.registerForm = this.fb.group(
       {
-        firstName: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(100),
+            this.noWhitespaceValidator,
+          ],
+        ],
         middleName: ['', [Validators.maxLength(100)]],
-        lastName: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(100),
+            this.noWhitespaceValidator,
+          ],
+        ],
         email: ['', [Validators.required, Validators.email]],
         mobile: [
           '',
@@ -78,25 +100,31 @@ export class RegisterComponent implements OnInit, OnDestroy {
             Validators.pattern(/^(\+\d{1,3}[- ]?)?\d{10}$/),
           ],
         ],
-        password: ['', [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-        ]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+            ),
+          ],
+        ],
         confirmPassword: ['', [Validators.required]],
       },
-      { validators: [this.passwordsMatchValidator] }
+      { validators: [this.passwordsMatchValidator] },
     );
   }
 
   private setupEmailAvailabilityCheck(): void {
-    this.registerForm.get('email')?.valueChanges
-      .pipe(
+    this.registerForm
+      .get('email')
+      ?.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
-      .subscribe(email => {
+      .subscribe((email) => {
         if (this.registerForm.get('email')?.valid && email) {
           this.checkEmailAvailability(email);
         } else {
@@ -106,7 +134,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   // Custom validator to check for whitespace only
-  private noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+  private noWhitespaceValidator(
+    control: AbstractControl,
+  ): ValidationErrors | null {
     if (control.value && control.value.trim().length === 0) {
       return { whitespace: true };
     }
@@ -114,7 +144,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   // Custom validator for confirm password
-  private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+  private passwordsMatchValidator(
+    group: AbstractControl,
+  ): ValidationErrors | null {
     const pass = group.get('password')?.value;
     const confirm = group.get('confirmPassword')?.value;
 
@@ -155,14 +187,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private sanitizeInputs(): void {
     const values = this.registerForm.value;
 
-    Object.keys(values).forEach(key => {
+    Object.keys(values).forEach((key) => {
       if (typeof values[key] === 'string') {
-        this.registerForm.get(key)?.setValue(values[key].trim(), { emitEvent: false });
+        this.registerForm
+          .get(key)
+          ?.setValue(values[key].trim(), { emitEvent: false });
       }
     });
   }
 
-  get f() { return this.registerForm.controls; }
+  get f() {
+    return this.registerForm.controls;
+  }
 
   async onSubmit() {
     if (this.registerForm.invalid) {
@@ -206,12 +242,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.router.navigate(['/auth/login']);
       }, 2000);
-
     } catch (error: any) {
       let errorDetail = 'Please try again.';
-      debugger
+      // debugger
       // Handle specific error cases
-      if (error.message?.includes('already registered') || error.message?.includes('exists')) {
+      if (
+        error.message?.includes('already registered') ||
+        error.message?.includes('exists')
+      ) {
         errorDetail = 'This email is already registered.';
       } else if (error.message?.includes('password')) {
         errorDetail = 'Password does not meet security requirements.';
