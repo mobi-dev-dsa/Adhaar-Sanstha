@@ -1,119 +1,383 @@
-<div class="schemes-list">
+<div class="schemes-container">
+  <!-- Subtle background -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-grid"></div>
+  </div>
+
   <div class="container">
-    <div class="header">
-      <h1>Government Schemes</h1>
-      <p>Available government schemes and support programs for persons with disabilities</p>
-    </div>
+    <!-- ── Page Header ── -->
+    <header class="page-header" aria-labelledby="page-title">
+      <div class="header-tag" aria-hidden="true">Support & Benefits</div>
+      <h1 id="page-title" class="header-title">Government Schemes</h1>
+      <p class="header-subtitle">
+        Available government schemes and support programs for persons with
+        disabilities
+      </p>
+    </header>
 
-    <!-- Category Filter -->
-    <div class="filter-section mb-4">
-      <label for="categoryFilter">Filter by Category:</label>
-      <p-dropdown 
-        id="categoryFilter"
-        [options]="categories" 
-        [(ngModel)]="selectedCategory"
-        placeholder="All Categories"
-        (onChange)="filterSchemes()">
-      </p-dropdown>
-    </div>
-
-    <!-- Schemes Grid -->
-    <div class="grid">
-      <div 
-        *ngFor="let scheme of filteredSchemes" 
-        class="col-12 md:col-6 lg:col-4">
-        <p-card 
-          [header]="scheme.title"
-          [subheader]="scheme.category"
-          styleClass="scheme-card">
-          
-          <ng-template pTemplate="header">
-            <div class="scheme-header">
-              <div class="scheme-icon">
-                <i [class]="scheme.icon"></i>
-              </div>
-              <div class="scheme-status">
-                <p-tag 
-                  [value]="scheme.status" 
-                  [severity]="getStatusSeverity(scheme.status)">
-                </p-tag>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-template pTemplate="content">
-            <p class="scheme-description">{{ scheme.description }}</p>
-            
-            <div class="scheme-details">
-              <div class="detail-item">
-                <i class="pi pi-calendar"></i>
-                <span>Valid until: {{ scheme.validUntil | date:'mediumDate' }}</span>
-              </div>
-              <div class="detail-item">
-                <i class="pi pi-money-bill"></i>
-                <span>Amount: {{ scheme.amount }}</span>
-              </div>
-              <div class="detail-item">
-                <i class="pi pi-users"></i>
-                <span>Eligibility: {{ scheme.eligibility }}</span>
-              </div>
-            </div>
-
-            <div class="scheme-benefits" *ngIf="scheme.benefits?.length">
-              <h4>Key Benefits:</h4>
-              <ul>
-                <li *ngFor="let benefit of scheme.benefits">{{ benefit }}</li>
-              </ul>
-            </div>
-
-            <div class="scheme-requirements" *ngIf="scheme.requirements?.length">
-              <h4>Requirements:</h4>
-              <ul>
-                <li *ngFor="let requirement of scheme.requirements">{{ requirement }}</li>
-              </ul>
-            </div>
-          </ng-template>
-
-          <ng-template pTemplate="footer">
-            <div class="card-footer">
-              <p-button 
-                *ngIf="scheme.applicationLink"
-                label="Apply Now" 
-                icon="pi pi-external-link"
-                styleClass="p-button-primary"
-                (click)="openApplication(scheme.applicationLink)">
-              </p-button>
-              <p-button 
-                *ngIf="scheme.detailsLink"
-                label="Learn More" 
-                icon="pi pi-info-circle"
-                styleClass="p-button-outlined"
-                (click)="openDetails(scheme.detailsLink)">
-              </p-button>
-              <p-button 
-                *ngIf="!scheme.applicationLink && !scheme.detailsLink"
-                label="Contact Department" 
-                icon="pi pi-envelope"
-                styleClass="p-button-outlined"
-                (click)="contactDepartment(scheme)">
-              </p-button>
-            </div>
-          </ng-template>
-        </p-card>
+    <!-- ── Filter ── -->
+    <section class="filter-section" aria-label="Filter schemes">
+      <div class="filter-inner">
+        <label for="categoryFilter" class="filter-label">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
+          Filter by Category
+        </label>
+        <p-dropdown
+          id="categoryFilter"
+          [options]="categories"
+          [(ngModel)]="selectedCategory"
+          placeholder="All Categories"
+          styleClass="filter-dropdown"
+          [appendTo]="'body'"
+          (onChange)="filterSchemes()"
+          aria-label="Filter schemes by category"
+        ></p-dropdown>
+        <button
+          *ngIf="selectedCategory"
+          class="clear-filter-btn"
+          (click)="clearFilters()"
+          aria-label="Clear category filter"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          Clear
+        </button>
       </div>
-    </div>
+      <p class="results-count" aria-live="polite" aria-atomic="true">
+        Showing <strong>{{ filteredSchemes.length }}</strong>
+        {{ filteredSchemes.length === 1 ? "scheme" : "schemes" }}
+        <span *ngIf="selectedCategory">
+          in <strong>{{ selectedCategory }}</strong></span
+        >
+      </p>
+    </section>
 
-    <!-- Empty State -->
-    <div *ngIf="filteredSchemes.length === 0" class="empty-state">
-      <i class="pi pi-search" style="font-size: 3rem; color: var(--text-color-secondary);"></i>
-      <h3>No schemes found</h3>
-      <p>Try adjusting your filter criteria or contact us for more information.</p>
-      <p-button 
-        label="Clear Filters" 
-        icon="pi pi-refresh"
-        styleClass="p-button-outlined"
-        (click)="clearFilters()">
-      </p-button>
+    <!-- ── Schemes Grid ── -->
+    <section aria-label="Schemes list" *ngIf="filteredSchemes.length > 0">
+      <div class="schemes-grid">
+        <article
+          *ngFor="let scheme of filteredSchemes; let i = index"
+          class="scheme-card"
+          [style.animation-delay]="(i % 6) * 0.07 + 's'"
+          [attr.aria-labelledby]="'scheme-title-' + i"
+        >
+          <!-- Card hero band -->
+          <div class="card-hero" aria-hidden="true">
+            <div class="card-icon-wrap">
+              <i [class]="scheme.icon"></i>
+            </div>
+            <!-- Status badge -->
+            <span
+              class="status-badge"
+              [class]="'status-badge--' + scheme.status.toLowerCase()"
+              [attr.aria-label]="'Status: ' + scheme.status"
+            >
+              <span class="status-dot" aria-hidden="true"></span>
+              {{ scheme.status }}
+            </span>
+          </div>
+
+          <!-- Category pill -->
+          <div class="card-category-row">
+            <span class="category-badge">{{ scheme.category }}</span>
+          </div>
+
+          <!-- Card body -->
+          <div class="card-body">
+            <h2 [id]="'scheme-title-' + i" class="card-title">
+              {{ scheme.title }}
+            </h2>
+            <p class="card-description">{{ scheme.description }}</p>
+
+            <!-- Meta details -->
+            <ul class="card-meta" aria-label="Scheme details">
+              <li class="meta-item" *ngIf="scheme.validUntil">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span
+                  >Valid until
+                  <strong>{{
+                    scheme.validUntil | date: "mediumDate"
+                  }}</strong></span
+                >
+              </li>
+              <li class="meta-item" *ngIf="scheme.amount">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                <span
+                  >Amount: <strong>{{ scheme.amount }}</strong></span
+                >
+              </li>
+              <li class="meta-item" *ngIf="scheme.eligibility">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>{{ scheme.eligibility }}</span>
+              </li>
+            </ul>
+
+            <!-- Benefits -->
+            <div
+              class="card-list-block card-list-block--green"
+              *ngIf="scheme.benefits?.length"
+              aria-label="Key benefits"
+            >
+              <p class="list-block-label">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Key Benefits
+              </p>
+              <ul class="card-list">
+                <li *ngFor="let benefit of scheme.benefits">
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  {{ benefit }}
+                </li>
+              </ul>
+            </div>
+
+            <!-- Requirements -->
+            <div
+              class="card-list-block card-list-block--amber"
+              *ngIf="scheme.requirements?.length"
+              aria-label="Requirements"
+            >
+              <p class="list-block-label">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                Requirements
+              </p>
+              <ul class="card-list">
+                <li *ngFor="let req of scheme.requirements">
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  {{ req }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card footer -->
+          <div
+            class="card-footer"
+            role="group"
+            [attr.aria-label]="'Actions for ' + scheme.title"
+          >
+            <button
+              *ngIf="scheme.applicationLink"
+              class="btn-primary-card"
+              (click)="openApplication(scheme.applicationLink)"
+              [attr.aria-label]="'Apply for ' + scheme.title"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Apply Now
+            </button>
+            <button
+              *ngIf="scheme.detailsLink"
+              class="btn-outline-card"
+              (click)="openDetails(scheme.detailsLink)"
+              [attr.aria-label]="'Learn more about ' + scheme.title"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Learn More
+            </button>
+            <button
+              *ngIf="!scheme.applicationLink && !scheme.detailsLink"
+              class="btn-outline-card"
+              (click)="contactDepartment(scheme)"
+              [attr.aria-label]="'Contact department about ' + scheme.title"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              Contact Department
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── Empty State ── -->
+    <div
+      *ngIf="filteredSchemes.length === 0"
+      class="empty-state"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="empty-icon" aria-hidden="true">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      </div>
+      <h2 class="empty-title">No schemes found</h2>
+      <p class="empty-desc">Try adjusting your filter or browse all schemes.</p>
+      <button class="btn-outline-card" (click)="clearFilters()">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <polyline points="1 4 1 10 7 10" />
+          <path d="M3.51 15a9 9 0 1 0 .49-3.51" />
+        </svg>
+        Clear Filters
+      </button>
     </div>
   </div>
-</div> 
+</div>

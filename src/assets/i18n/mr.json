@@ -19,6 +19,7 @@
     "REGISTER_SUBTITLE": "आजच आधार संस्थेत सामील व्हा",
     "EMAIL": "ईमेल",
     "PASSWORD": "पासवर्ड",
+    "PASSWORD_PLACEHOLDER": "तुमचा पासवर्ड टाका",
     "CONFIRM_PASSWORD": "पासवर्डची पुष्टी करा",
     "SIGN_IN": "साइन इन",
     "CREATE_ACCOUNT": "खाते तयार करा",
@@ -27,6 +28,29 @@
     "HAVE_ACCOUNT": "आधीपासून खाते आहे?",
     "SIGN_UP_HERE": "येथे साइन अप करा",
     "SIGN_IN_HERE": "येथे साइन इन करा"
+  },
+  "REGISTER_FORM": {
+    "FIRST_NAME": "पहिले नाव",
+    "FIRST_NAME_PLACEHOLDER": "उदा. राहुल",
+    "MIDDLE_NAME": "मधले नाव",
+    "MIDDLE_NAME_PLACEHOLDER": "उदा. अमित",
+    "SURNAME": "आडनाव",
+    "SURNAME_PLACEHOLDER": "उदा. शर्मा",
+    "EMAIL": "ईमेल",
+    "MOBILE": "मोबाईल क्रमांक",
+    "PERSONAL_DETAILS": "वैयक्तिक तपशील",
+    "CONTACT_DETAILS": "संपर्क तपशील",
+    "SECURITY": "सुरक्षा",
+    "PASSWORD_HINT": "अक्षरे, अंक आणि चिन्हे वापरा",
+    "PASSWORD_PLACEHOLDER": "किमान 6 अक्षरे",
+    "FIRST_NAME_ERROR": "पहिले नाव आवश्यक आहे",
+    "SURNAME_ERROR": "आडनाव आवश्यक आहे",
+    "EMAIL_ERROR": "कृपया वैध ईमेल पत्ता प्रविष्ट करा",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "आपला पासवर्ड पुन्हा प्रविष्ट करा",
+    "PASSWORD_ERROR": "पासवर्ड किमान 6 अक्षरांचा असावा",
+    "REGISTER_BUTTON_TEXT": "खाते तयार करा",
+    "REGISTERING_BUTTON_TEXT": "खाते तयार करत आहे...",
+    "OPTIONAL": "ऐच्छिक"
   },
   "PWD": {
     "REGISTRATION_TITLE": "दिव्यांग नोंदणी",
@@ -99,4 +123,4 @@
     "SUBMIT": "सबमिट करा",
     "RESET": "रीसेट"
   }
-} 
+}

@@ -1,4 +1,8 @@
 <header role="banner">
+  <!-- WCAG 3.2.2 — screen reader announcement for language changes -->
+  <span aria-live="polite" aria-atomic="true" class="sr-only">{{
+    languageChangeAnnouncement
+  }}</span>
   <nav class="navbar" aria-label="Main navigation">
     <div class="nav-inner">
       <!-- ── Brand ── -->
@@ -109,6 +113,7 @@
           <button
             class="a11y-btn"
             (click)="toggleHighContrast()"
+            [attr.aria-pressed]="isHighContrast"
             aria-label="Toggle high contrast mode"
             title="Toggle high contrast"
           >

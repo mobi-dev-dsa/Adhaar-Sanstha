@@ -4,7 +4,7 @@
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
-/* Global styles */
+/* Global reset */
 * {
   box-sizing: border-box;
 }
@@ -13,13 +13,21 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: var(--font-family);
   background-color: var(--surface-ground);
   color: var(--text-color);
 }
 
-/* App shell — flex column so navbar + main + footer stack cleanly */
+/* Smooth font scaling when accessibility controls change html font-size */
+html {
+  transition: font-size 0.2s ease;
+}
+
+/*
+  App shell: navbar + main + footer stacked in a full-height flex column.
+  main-content fills whatever space is left between navbar and footer.
+  The register page renders inside main-content and centres itself within it.
+*/
 app-root {
   display: flex;
   flex-direction: column;
@@ -35,17 +43,120 @@ app-footer {
 }
 
 .main-content {
-  flex: 1;
+  flex: 1; /* fills space between navbar and footer */
   display: flex;
   flex-direction: column;
 }
 
-/* Accessibility styles */
-.high-contrast {
-  filter: contrast(150%);
+/* ── High Contrast Mode ────────────────────────────────────────────────────────
+   Instead of filter:contrast() which bleaches semi-transparent backgrounds,
+   we override specific CSS properties to boost contrast meaningfully.
+   Applied to <body> via NavbarComponent's toggleHighContrast().
+*/
+body.high-contrast {
+  /* Stronger text colours */
+  --text-color: #000000;
+  --text-color-secondary: #1a1a1a;
+  --text-muted: #2d2d2d;
+
+  /* Force solid white backgrounds — removes translucency that washes out */
+  --surface-ground: #ffffff;
+  --surface-card: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #f0f0f0;
+  --bg: #e8e8f0;
+
+  /* Stronger borders */
+  --surface-border: #000000;
+  --border: #000000;
+
+  /* Ensure brand colour stays readable */
+  --primary-color: #3730a3;
+  --brand: #3730a3;
+  --brand-dark: #1e1b6e;
+
+  /* Kill all semi-transparent backgrounds and blurs */
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Force solid backgrounds on elements that use rgba/transparency */
+  .hero-content {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .stat-item {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .feature-card,
+  .program-card,
+  .scheme-card {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure all text on coloured backgrounds is readable */
+  .stats-section {
+    background: #1e1b6e !important;
+    .stat-number {
+      color: #ffffff !important;
+    }
+    .stat-label {
+      color: #e0e0e0 !important;
+    }
+  }
+
+  .card-hero {
+    background: #1e1b6e !important;
+  }
+
+  /* Stronger focus rings */
+  *:focus-visible {
+    outline: 3px solid #000000 !important;
+    outline-offset: 3px !important;
+  }
+
+  /* Nav */
+  .navbar {
+    background: #1e1b6e !important;
+    border-bottom: 2px solid #000000 !important;
+  }
+
+  /* Inputs */
+  input,
+  select,
+  textarea,
+  .p-inputtext,
+  .p-password-input {
+    border: 2px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Buttons */
+  .btn-primary-hero,
+  .btn-primary-card,
+  .submit-btn {
+    background: #1e1b6e !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .btn-outline-hero,
+  .btn-outline-card {
+    border: 2px solid #000000 !important;
+    color: #000000 !important;
+  }
 }
 
-/* Responsive utilities */
+/* Layout utilities */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -61,7 +172,6 @@ app-footer {
 .no-underline {
   text-decoration: none;
 }
-
 .hover\:text-blue-200:hover {
   color: #bfdbfe;
 }
@@ -131,4 +241,112 @@ app-footer {
   .container {
     padding: 0 0.5rem;
   }
+}
+
+/* ── Skip Navigation (WCAG 2.4.1) ─────────────────────────────────────────────
+   First focusable element on the page — reveals on keyboard focus.
+   Add <a href="#main-content" class="skip-link">Skip to main content</a>
+   as the very first child of <app-root> or <body>.
+*/
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 99999;
+  padding: 0.75rem 1.25rem;
+  background: #4f46e5;
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  &:focus {
+    top: 0;
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+  }
+}
+
+/* ── Server / form-level error block ──────────────────────────────────────────
+   Used on login + register for errors that come back from the server.
+*/
+.server-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 10px;
+  color: #991b1b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #dc2626;
+  }
+}
+
+/* ── Fix text-muted contrast (WCAG 1.4.3) ─────────────────────────────────────
+   #9CA3AF on white = 2.85:1 — FAILS AA.
+   Force any element using text-muted for body text to use text-secondary instead.
+   Decorative/supplementary uses (placeholders, meta labels) are exempt.
+*/
+.trust-item,
+.results-count,
+.features-label,
+.stat-label {
+  color: #4b5563; /* --text-secondary: 7.2:1 on white ✅ */
+}
+
+.home-container .hero-section {
+  background: #fafbff !important;
+  color: #111827 !important;
+}
+
+.home-container .hero-section .hero-title,
+.home-container .hero-section .hero-subtitle {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* ── WCAG 2.4.1 Skip Navigation ───────────────────────────────────────────────
+   Visually hidden until focused — first focusable element on every page.
+*/
+.skip-nav {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  background: #1e1b6e;
+  color: #ffffff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+
+  &:focus {
+    top: 0;
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+/* ── WCAG 2.4.11 Focus Not Obscured ──────────────────────────────────────────
+   Prevents sticky navbar (64px tall) from covering focused elements
+   when user tabs or clicks anchor links.
+*/
+html {
+  scroll-padding-top: 80px; /* navbar height (64px) + 16px breathing room */
 }

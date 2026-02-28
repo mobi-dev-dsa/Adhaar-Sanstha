@@ -1,5 +1,4 @@
 <div class="login-container">
-  <!-- Subtle background -->
   <div class="bg-layer" aria-hidden="true">
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
@@ -7,19 +6,50 @@
   </div>
 
   <div class="login-wrapper">
-    <main class="form-panel" role="main">
+    <main
+      class="form-panel"
+      id="main-content"
+      role="main"
+      aria-labelledby="login-heading"
+      tabindex="-1"
+    >
       <header class="form-header">
-        <h1>Welcome back</h1>
-        <p>Sign in to your account to continue</p>
+        <h1 id="login-heading">{{ "AUTH.LOGIN_TITLE" | translate }}</h1>
+        <p>{{ "AUTH.LOGIN_SUBTITLE" | translate }}</p>
       </header>
+
+      <!-- Server-level error (wrong password, account not found etc.) -->
+      <div
+        *ngIf="serverError"
+        class="server-error"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ serverError }}
+      </div>
 
       <form
         [formGroup]="loginForm"
         (ngSubmit)="onSubmit()"
         novalidate
         class="login-form"
+        aria-label="Sign in to your account"
       >
-        <!-- ── Email ── -->
+        <!-- Email -->
         <div
           class="field"
           [class.field--error]="
@@ -27,7 +57,8 @@
           "
         >
           <label for="email" class="field-label">
-            Email Address <span class="req-star" aria-hidden="true">*</span>
+            {{ "AUTH.EMAIL" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <div class="input-wrap">
             <svg
@@ -81,11 +112,11 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Please enter a valid email address
+            {{ "AUTH.ERRORS.INVALID_EMAIL" | translate }}
           </span>
         </div>
 
-        <!-- ── Password ── -->
+        <!-- Password -->
         <div
           class="field"
           [class.field--error]="
@@ -95,22 +126,32 @@
         >
           <div class="label-row">
             <label for="password" class="field-label">
-              Password <span class="req-star" aria-hidden="true">*</span>
+              {{ "AUTH.PASSWORD" | translate }}
+              <span class="req-star" aria-hidden="true">*</span>
             </label>
-            <a routerLink="/auth/forgot-password" class="forgot-link"
-              >Forgot password?</a
+            <a
+              href="/auth/forgot-password"
+              routerLink="/auth/forgot-password"
+              class="forgot-link"
             >
+              {{ "AUTH.FORGOT_PASSWORD" | translate }}
+            </a>
           </div>
           <p-password
-            id="password"
+            inputId="password"
             formControlName="password"
-            placeholder="Enter your password"
+            placeholder="{{ 'AUTH.PASSWORD_PLACEHOLDER' | translate }}"
             [toggleMask]="true"
             [feedback]="false"
             [inputStyleClass]="'field-input'"
             [style]="{ width: '100%' }"
-            aria-required="true"
-            aria-describedby="err-password"
+            [attr.aria-required]="'true'"
+            [attr.aria-describedby]="'err-password'"
+            [attr.aria-invalid]="
+              (loginForm.get('password')?.invalid &&
+                loginForm.get('password')?.touched) ||
+              null
+            "
           ></p-password>
           <span
             id="err-password"
@@ -134,18 +175,33 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Password must be at least 6 characters
+            {{ "AUTH.ERRORS.PASSWORD_MIN" | translate }}
           </span>
         </div>
 
-        <!-- ── Resend verification ── -->
-        <div class="resend-block" *ngIf="showResendEmail">
-          <p class="resend-text">Didn't receive the verification email?</p>
+        <!-- Resend verification -->
+        <div
+          class="resend-block"
+          *ngIf="showResendEmail"
+          role="region"
+          aria-label="Email verification"
+        >
+          <p class="resend-text" id="resend-desc">
+            {{ "AUTH.RESEND_PROMPT" | translate }}
+          </p>
           <button
             type="button"
             class="resend-btn"
             (click)="resendConfirmation()"
             [disabled]="loading || sendingEmail"
+            [attr.aria-label]="
+              sendingEmail
+                ? ('AUTH.SENDING' | translate)
+                : ('AUTH.RESEND_VERIFICATION' | translate)
+            "
+            [attr.aria-busy]="sendingEmail ? 'true' : null"
+            [attr.aria-disabled]="loading || sendingEmail ? 'true' : null"
+            aria-describedby="resend-desc"
           >
             <svg
               *ngIf="sendingEmail"
@@ -166,17 +222,27 @@
                 stroke-dashoffset="8"
               />
             </svg>
-            {{ sendingEmail ? "Sending…" : "Resend Verification Email" }}
+            {{
+              sendingEmail
+                ? ("AUTH.SENDING" | translate)
+                : ("AUTH.RESEND_VERIFICATION" | translate)
+            }}
           </button>
         </div>
 
-        <!-- ── Submit ── -->
+        <!-- Submit -->
         <div class="form-footer">
           <button
             type="submit"
             class="submit-btn"
             [disabled]="loginForm.invalid || loading"
             [attr.aria-busy]="loading ? 'true' : null"
+            [attr.aria-label]="
+              loading
+                ? ('AUTH.SIGNING_IN' | translate)
+                : ('AUTH.SIGN_IN' | translate)
+            "
+            [attr.aria-disabled]="loginForm.invalid || loading ? 'true' : null"
           >
             <svg
               *ngIf="loading"
@@ -197,7 +263,11 @@
                 stroke-dashoffset="8"
               />
             </svg>
-            <span>{{ loading ? "Signing in…" : "Sign In" }}</span>
+            <span>{{
+              loading
+                ? ("AUTH.SIGNING_IN" | translate)
+                : ("AUTH.SIGN_IN" | translate)
+            }}</span>
             <svg
               *ngIf="!loading"
               class="btn-arrow"
@@ -215,8 +285,14 @@
           </button>
 
           <p class="signup-prompt">
-            Don't have an account?
-            <a routerLink="/auth/register" class="signup-link">Sign up here</a>
+            {{ "AUTH.NO_ACCOUNT" | translate }}
+            <a
+              href="/auth/register"
+              routerLink="/auth/register"
+              class="signup-link"
+            >
+              {{ "AUTH.SIGN_UP_HERE" | translate }}
+            </a>
           </p>
         </div>
       </form>

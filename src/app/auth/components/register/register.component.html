@@ -7,27 +7,58 @@
   </div>
 
   <div class="register-wrapper">
-    <main class="form-panel" role="main">
+    <main
+      class="form-panel"
+      id="main-content"
+      role="main"
+      aria-labelledby="register-heading"
+      tabindex="-1"
+    >
       <header class="form-header">
-        <h1>Create your account</h1>
+        <h1 id="register-heading">{{ "AUTH.REGISTER_TITLE" | translate }}</h1>
         <p>
           Fields marked <abbr title="required" class="req-star">*</abbr> are
           required
         </p>
       </header>
 
+      <!-- Server-level error (e.g. email already taken) -->
+      <div
+        *ngIf="serverError"
+        class="server-error"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ serverError }}
+      </div>
+
       <form
         [formGroup]="registerForm"
         (ngSubmit)="onSubmit()"
         novalidate
         class="reg-form"
+        aria-label="Create your account"
       >
-        <!-- ── Row 1: Name section label spanning full ── -->
+        <!-- ── Personal Details ── -->
         <div class="section-divider col-span-2" aria-hidden="true">
-          <span>Personal details</span>
+          <span>{{ "REGISTER_FORM.PERSONAL_DETAILS" | translate }}</span>
         </div>
 
-        <!-- ── First Name ── -->
+        <!-- First Name -->
         <div
           class="field"
           [class.field--error]="
@@ -36,14 +67,17 @@
           "
         >
           <label for="firstName" class="field-label">
-            First Name <span class="req-star" aria-hidden="true">*</span>
+            {{ "REGISTER_FORM.FIRST_NAME" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <input
             id="firstName"
             type="text"
             pInputText
             formControlName="firstName"
-            placeholder="e.g. Jane"
+            placeholder="{{
+              'REGISTER_FORM.FIRST_NAME_PLACEHOLDER' | translate
+            }}"
             class="field-input"
             autocomplete="given-name"
             aria-required="true"
@@ -76,27 +110,33 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            First name is required
+            {{ "REGISTER_FORM.FIRST_NAME_ERROR" | translate }}
           </span>
         </div>
 
-        <!-- ── Middle Name ── -->
+        <!-- Middle Name -->
         <div class="field">
           <label for="middleName" class="field-label">
-            Middle Name <span class="field-optional">(optional)</span>
+            {{ "REGISTER_FORM.MIDDLE_NAME" | translate }}
+            <span class="field-optional"
+              >({{ "REGISTER_FORM.OPTIONAL" | translate }})</span
+            >
           </label>
           <input
             id="middleName"
             type="text"
             pInputText
             formControlName="middleName"
-            placeholder="e.g. Anne"
+            placeholder="{{
+              'REGISTER_FORM.MIDDLE_NAME_PLACEHOLDER' | translate
+            }}"
             class="field-input"
             autocomplete="additional-name"
+            aria-required="false"
           />
         </div>
 
-        <!-- ── Surname ── -->
+        <!-- Surname -->
         <div
           class="field"
           [class.field--error]="
@@ -105,14 +145,15 @@
           "
         >
           <label for="lastName" class="field-label">
-            Surname <span class="req-star" aria-hidden="true">*</span>
+            {{ "REGISTER_FORM.SURNAME" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <input
             id="lastName"
             type="text"
             pInputText
             formControlName="lastName"
-            placeholder="e.g. Smith"
+            placeholder="{{ 'REGISTER_FORM.SURNAME_PLACEHOLDER' | translate }}"
             class="field-input"
             autocomplete="family-name"
             aria-required="true"
@@ -145,16 +186,16 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Surname is required
+            {{ "REGISTER_FORM.SURNAME_ERROR" | translate }}
           </span>
         </div>
 
-        <!-- ── Contact section divider ── -->
+        <!-- ── Contact Details ── -->
         <div class="section-divider col-span-2" aria-hidden="true">
-          <span>Contact details</span>
+          <span>{{ "REGISTER_FORM.CONTACT_DETAILS" | translate }}</span>
         </div>
 
-        <!-- ── Email ── -->
+        <!-- Email -->
         <div
           class="field"
           [class.field--error]="
@@ -163,7 +204,8 @@
           "
         >
           <label for="email" class="field-label">
-            Email Address <span class="req-star" aria-hidden="true">*</span>
+            {{ "REGISTER_FORM.EMAIL" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <div class="input-wrap">
             <svg
@@ -218,14 +260,17 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Please enter a valid email address
+            {{ "REGISTER_FORM.EMAIL_ERROR" | translate }}
           </span>
         </div>
 
-        <!-- ── Mobile ── -->
+        <!-- Mobile -->
         <div class="field">
           <label for="mobile" class="field-label">
-            Mobile Number <span class="field-optional">(optional)</span>
+            {{ "REGISTER_FORM.MOBILE" | translate }}
+            <span class="field-optional"
+              >({{ "REGISTER_FORM.OPTIONAL" | translate }})</span
+            >
           </label>
           <div class="input-wrap">
             <svg
@@ -246,19 +291,20 @@
               type="tel"
               pInputText
               formControlName="mobile"
-              placeholder="+1 234 567 8900"
+              placeholder="+91 98765 43210"
               class="field-input field-input--icon"
               autocomplete="tel"
+              aria-required="false"
             />
           </div>
         </div>
 
-        <!-- ── Security section divider ── -->
+        <!-- ── Security ── -->
         <div class="section-divider col-span-2" aria-hidden="true">
-          <span>Security</span>
+          <span>{{ "REGISTER_FORM.SECURITY" | translate }}</span>
         </div>
 
-        <!-- ── Password ── -->
+        <!-- Password -->
         <div
           class="field"
           [class.field--error]="
@@ -267,22 +313,28 @@
           "
         >
           <label for="password" class="field-label">
-            Password <span class="req-star" aria-hidden="true">*</span>
+            {{ "AUTH.PASSWORD" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <p-password
-            id="password"
+            inputId="password"
             formControlName="password"
-            placeholder="At least 6 characters"
+            placeholder="{{ 'REGISTER_FORM.PASSWORD_PLACEHOLDER' | translate }}"
             [toggleMask]="true"
             [feedback]="true"
             [inputStyleClass]="'field-input'"
             [style]="{ width: '100%' }"
-            aria-required="true"
-            aria-describedby="hint-password err-password"
+            [attr.aria-required]="'true'"
+            [attr.aria-describedby]="'hint-password err-password'"
+            [attr.aria-invalid]="
+              (registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.touched) ||
+              null
+            "
           ></p-password>
-          <span id="hint-password" class="field-hint"
-            >Use letters, numbers &amp; symbols</span
-          >
+          <span id="hint-password" class="field-hint">
+            {{ "REGISTER_FORM.PASSWORD_HINT" | translate }}
+          </span>
           <span
             id="err-password"
             class="field-error"
@@ -305,11 +357,11 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Password must be at least 6 characters
+            {{ "REGISTER_FORM.PASSWORD_ERROR" | translate }}
           </span>
         </div>
 
-        <!-- ── Confirm Password ── -->
+        <!-- Confirm Password -->
         <div
           class="field"
           [class.field--error]="
@@ -318,18 +370,28 @@
           "
         >
           <label for="confirmPassword" class="field-label">
-            Confirm Password <span class="req-star" aria-hidden="true">*</span>
+            {{ "AUTH.CONFIRM_PASSWORD" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
           </label>
           <p-password
-            id="confirmPassword"
+            inputId="confirmPassword"
             formControlName="confirmPassword"
-            placeholder="Re-enter your password"
+            placeholder="{{
+              'REGISTER_FORM.CONFIRM_PASSWORD_PLACEHOLDER' | translate
+            }}"
             [toggleMask]="true"
             [feedback]="false"
             [inputStyleClass]="'field-input'"
             [style]="{ width: '100%' }"
-            aria-required="true"
-            aria-describedby="err-confirmPassword"
+            [attr.aria-required]="'true'"
+            [attr.aria-describedby]="'err-confirmPassword'"
+            [attr.aria-invalid]="
+              (registerForm.get('confirmPassword')?.errors?.[
+                'passwordMismatch'
+              ] &&
+                registerForm.get('confirmPassword')?.touched) ||
+              null
+            "
           ></p-password>
           <span
             id="err-confirmPassword"
@@ -354,17 +416,25 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Passwords do not match
+            {{ "AUTH.CONFIRM_PASSWORD_MISMATCH" | translate }}
           </span>
         </div>
 
-        <!-- ── Submit — full width ── -->
+        <!-- ── Submit ── -->
         <div class="form-footer col-span-2">
           <button
             type="submit"
             class="submit-btn"
             [disabled]="registerForm.invalid || loading"
             [attr.aria-busy]="loading ? 'true' : null"
+            [attr.aria-label]="
+              loading
+                ? ('REGISTER_FORM.REGISTERING_BUTTON_TEXT' | translate)
+                : ('REGISTER_FORM.REGISTER_BUTTON_TEXT' | translate)
+            "
+            [attr.aria-disabled]="
+              registerForm.invalid || loading ? 'true' : null
+            "
           >
             <svg
               *ngIf="loading"
@@ -385,7 +455,11 @@
                 stroke-dashoffset="8"
               />
             </svg>
-            <span>{{ loading ? "Creating account…" : "Create Account" }}</span>
+            <span>{{
+              loading
+                ? ("REGISTER_FORM.REGISTERING_BUTTON_TEXT" | translate)
+                : ("REGISTER_FORM.REGISTER_BUTTON_TEXT" | translate)
+            }}</span>
             <svg
               *ngIf="!loading"
               class="btn-arrow"
@@ -403,13 +477,17 @@
           </button>
 
           <p class="signin-prompt">
-            Already have an account?
-            <a routerLink="/auth/login" class="signin-link">Sign in</a>
+            {{ "AUTH.HAVE_ACCOUNT" | translate }}
+            <a href="/auth/login" routerLink="/auth/login" class="signin-link">
+              {{ "AUTH.SIGN_IN" | translate }}
+            </a>
           </p>
 
           <p class="terms-text">
             By creating an account you agree to our
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            <a href="/terms" routerLink="/terms">Terms of Service</a>
+            and
+            <a href="/privacy" routerLink="/privacy">Privacy Policy</a>.
           </p>
         </div>
       </form>

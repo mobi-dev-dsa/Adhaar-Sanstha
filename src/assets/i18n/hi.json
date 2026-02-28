@@ -19,6 +19,7 @@
     "REGISTER_SUBTITLE": "आज ही आधार संस्था में शामिल हों",
     "EMAIL": "ईमेल",
     "PASSWORD": "पासवर्ड",
+    "PASSWORD_PLACEHOLDER": "अपना पासवर्ड दर्ज करें",
     "CONFIRM_PASSWORD": "पासवर्ड की पुष्टि करें",
     "SIGN_IN": "साइन इन",
     "CREATE_ACCOUNT": "खाता बनाएं",
@@ -27,6 +28,29 @@
     "HAVE_ACCOUNT": "पहले से खाता है?",
     "SIGN_UP_HERE": "यहां साइन अप करें",
     "SIGN_IN_HERE": "यहां साइन इन करें"
+  },
+  "REGISTER_FORM": {
+    "FIRST_NAME": "पहला नाम",
+    "FIRST_NAME_PLACEHOLDER": "उदा. राहुल",
+    "MIDDLE_NAME": "मध्य नाम",
+    "MIDDLE_NAME_PLACEHOLDER": "उदा. अमित",
+    "SURNAME": "उपनाम",
+    "SURNAME_PLACEHOLDER": "उदा. शर्मा",
+    "EMAIL": "ईमेल",
+    "MOBILE": "मोबाइल नंबर",
+    "PERSONAL_DETAILS": "व्यक्तिगत विवरण",
+    "CONTACT_DETAILS": "संपर्क विवरण",
+    "SECURITY": "सुरक्षा",
+    "PASSWORD_HINT": "अक्षरों, अंकों और प्रतीकों का उपयोग करें",
+    "PASSWORD_PLACEHOLDER": "कम से कम 6 अक्षर",
+    "FIRST_NAME_ERROR": "पहला नाम आवश्यक है",
+    "SURNAME_ERROR": "उपनाम आवश्यक है",
+    "EMAIL_ERROR": "कृपया एक वैध ईमेल पता दर्ज करें",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "अपना पासवर्ड दोबारा दर्ज करें",
+    "PASSWORD_ERROR": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+    "REGISTER_BUTTON_TEXT": "खाता बनाएं",
+    "REGISTERING_BUTTON_TEXT": "खाता बनाया जा रहा है...",
+    "OPTIONAL": "वैकल्पिक"
   },
   "PWD": {
     "REGISTRATION_TITLE": "दिव्यांग पंजीकरण",
@@ -99,4 +123,4 @@
     "SUBMIT": "जमा करें",
     "RESET": "रीसेट"
   }
-} 
+}

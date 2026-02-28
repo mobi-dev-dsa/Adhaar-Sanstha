@@ -18,6 +18,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { DividerModule } from 'primeng/divider';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Interfaces for better type safety
 interface UserRegistrationData {
@@ -42,6 +43,7 @@ interface UserRegistrationData {
     ToastModule,
     DividerModule,
     RouterModule,
+    TranslateModule,
   ],
   providers: [MessageService],
   templateUrl: './register.component.html',
@@ -52,6 +54,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   loading = false;
   emailChecking = false;
   emailAvailable = true;
+
+  serverError?: string | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -133,7 +137,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Custom validator to check for whitespace only
   private noWhitespaceValidator(
     control: AbstractControl,
   ): ValidationErrors | null {
@@ -143,7 +146,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  // Custom validator for confirm password
   private passwordsMatchValidator(
     group: AbstractControl,
   ): ValidationErrors | null {
@@ -155,7 +157,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return { mismatch: true };
     }
 
-    // Clear the mismatch error if passwords match
     if (group.get('confirmPassword')?.errors?.['mismatch']) {
       group.get('confirmPassword')?.setErrors(null);
     }
@@ -167,8 +168,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.emailChecking = true;
 
     try {
-      // This would call your SupabaseService to check if email exists
-      // For now, we'll simulate this with a simple check
       const isAvailable = await this.supabaseService.checkEmailAvailable(email);
       this.emailAvailable = isAvailable;
 
@@ -177,7 +176,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Error checking email availability:', error);
-      // Don't block registration if check fails
       this.emailAvailable = true;
     } finally {
       this.emailChecking = false;
@@ -204,7 +202,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
 
-      // Show specific error message for email availability
       if (this.registerForm.get('email')?.errors?.['notAvailable']) {
         this.messageService.add({
           severity: 'error',
@@ -215,6 +212,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
       return;
     }
+
+    this.serverError = null;
 
     this.sanitizeInputs();
     this.loading = true;
@@ -230,7 +229,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     };
 
     try {
-      await this.supabaseService.signUp(userData, 2 /* default PWD role */);
+      await this.supabaseService.signUp(userData, 2);
 
       this.messageService.add({
         severity: 'success',
@@ -244,8 +243,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }, 2000);
     } catch (error: any) {
       let errorDetail = 'Please try again.';
-      // debugger
-      // Handle specific error cases
+
       if (
         error.message?.includes('already registered') ||
         error.message?.includes('exists')
@@ -256,6 +254,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       } else if (error.message?.includes('email')) {
         errorDetail = 'Please provide a valid email address.';
       }
+
+      this.serverError = errorDetail;
 
       this.messageService.add({
         severity: 'error',

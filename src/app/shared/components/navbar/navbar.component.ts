@@ -35,12 +35,16 @@ export class NavbarComponent implements OnInit {
   ];
   selectedLanguage = { label: 'English', value: 'en' };
   userMenuItems: MenuItem[] = [];
-  // Observable of current user (will be null on SSR)
   currentUser$ = this.supabase?.getCurrentUser();
   currentUser: User | null = null;
   mobileOpen = false;
+  isHighContrast = false;
+  languageChangeAnnouncement = '';
 
   private isBrowser: boolean;
+  private readonly MIN_FONT_SIZE = 12;
+  private readonly MAX_FONT_SIZE = 24;
+  private readonly FONT_STEP = 2;
 
   constructor(
     private translateService: TranslateService,
@@ -55,8 +59,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.currentUser$?.subscribe((user) => {
       this.currentUser = user;
-      // Update UI based on user state
     });
+
     this.translationLoader
       .getTranslation(this.selectedLanguage.value)
       .subscribe((translations) => {
@@ -67,7 +71,7 @@ export class NavbarComponent implements OnInit {
         );
         this.translateService.use(this.selectedLanguage.value);
       });
-    // Only setup user menu if running in browser
+
     if (this.isBrowser) {
       this.userMenuItems = [
         { label: 'Profile', icon: 'pi pi-user', command: () => {} },
@@ -79,9 +83,18 @@ export class NavbarComponent implements OnInit {
           command: () => this.signOut(),
         },
       ];
+
+      // Restore persisted accessibility preferences
+      const savedFontSize = localStorage.getItem('font-size');
+      if (savedFontSize) {
+        document.documentElement.style.fontSize = `${savedFontSize}px`;
+      }
+
+      if (localStorage.getItem('high-contrast') === 'true') {
+        document.body.classList.add('high-contrast');
+        this.isHighContrast = true;
+      }
     }
-    console.log(this.currentUser$);
-    // debugger
   }
 
   formatTime(seconds: number | null): string {
@@ -100,6 +113,18 @@ export class NavbarComponent implements OnInit {
         this.translateService.setTranslation(selectedLang, translations, true);
         this.translateService.use(selectedLang);
         this.selectedLanguage = event;
+
+        // WCAG 3.1.1 — update html[lang] to match selected language
+        if (this.isBrowser) {
+          document.documentElement.setAttribute('lang', selectedLang);
+        }
+
+        // WCAG 3.2.2 — announce language change to screen readers
+        const langLabel =
+          this.languages.find((l) => l.value === selectedLang)?.label ??
+          selectedLang;
+        this.languageChangeAnnouncement = `Language changed to ${langLabel}`;
+        setTimeout(() => (this.languageChangeAnnouncement = ''), 3000);
       },
       (error) => {
         console.error('Error loading translation:', error);
@@ -117,21 +142,35 @@ export class NavbarComponent implements OnInit {
 
   toggleHighContrast() {
     if (this.isBrowser) {
-      document.body.classList.toggle('high-contrast');
+      // WCAG 4.1.2 — track state for aria-pressed on the button
+      this.isHighContrast = document.body.classList.toggle('high-contrast');
+      localStorage.setItem(
+        'high-contrast',
+        this.isHighContrast ? 'true' : 'false',
+      );
     }
   }
 
   increaseFontSize() {
     if (this.isBrowser) {
-      const currentSize = parseInt(getComputedStyle(document.body).fontSize);
-      document.body.style.fontSize = `${currentSize + 2}px`;
+      // Use html (documentElement) — rem units scale off html, not body
+      const current = parseFloat(
+        getComputedStyle(document.documentElement).fontSize,
+      );
+      const next = Math.min(current + this.FONT_STEP, this.MAX_FONT_SIZE);
+      document.documentElement.style.fontSize = `${next}px`;
+      localStorage.setItem('font-size', String(next));
     }
   }
 
   decreaseFontSize() {
     if (this.isBrowser) {
-      const currentSize = parseInt(getComputedStyle(document.body).fontSize);
-      document.body.style.fontSize = `${currentSize - 2}px`;
+      const current = parseFloat(
+        getComputedStyle(document.documentElement).fontSize,
+      );
+      const next = Math.max(current - this.FONT_STEP, this.MIN_FONT_SIZE);
+      document.documentElement.style.fontSize = `${next}px`;
+      localStorage.setItem('font-size', String(next));
     }
   }
 }
