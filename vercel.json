@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": "dist/adhaar-sanstha/browser",
+  "outputDirectory": "dist/aadhar-sanstha",
   "cleanUrls": true,
   "trailingSlash": false,
 
