@@ -6,11 +6,15 @@
   --brand-mid: #818cf8;
   --brand-light: #eef2ff;
   --nav-bg: #4f46e5;
-  --nav-height: 64px;
+  --nav-height: 52px; // compact on mobile
   --text-on-dark: #ffffff;
-  --text-muted-on-dark: rgba(255, 255, 255, 0.72);
+  --text-muted-on-dark: rgba(255, 255, 255, 0.9);
   --border-on-dark: rgba(255, 255, 255, 0.15);
   --t: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (min-width: 900px) {
+    --nav-height: 62px; // full height on desktop
+  }
 }
 
 *,
@@ -40,7 +44,11 @@
   height: var(--nav-height);
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 0.75rem;
+
+  @media (min-width: 600px) {
+    padding: 0 1.5rem;
+  }
 }
 
 // ── Brand ─────────────────────────────────────────────────────────────────────
@@ -50,7 +58,11 @@
   gap: 9px;
   text-decoration: none;
   flex-shrink: 0;
-  margin-right: 2rem;
+  margin-right: auto; // push controls to right naturally on mobile
+
+  @media (min-width: 900px) {
+    margin-right: 2rem;
+  } // desktop: fixed gap before nav links
 
   &:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.8);
@@ -138,8 +150,12 @@
 .nav-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
+  gap: 0.35rem;
+  // Do NOT margin-left: auto here — brand handles it via margin-right: auto
+
+  @media (min-width: 600px) {
+    gap: 0.5rem;
+  }
 }
 
 // Hide these entirely on mobile — they move into mobile menu or are deprioritised
@@ -177,8 +193,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 1px solid var(--border-on-dark);
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.08);
@@ -189,6 +205,11 @@
     border-color var(--t),
     transform var(--t);
   font-family: inherit;
+
+  @media (min-width: 900px) {
+    width: 32px;
+    height: 32px;
+  }
 
   &:hover {
     background: rgba(255, 255, 255, 0.18);
@@ -321,10 +342,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 34px;
-  padding: 0 1rem;
+  height: 30px;
+  padding: 0 0.75rem;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--brand);
   background: #ffffff;
@@ -337,6 +358,12 @@
     box-shadow var(--t);
   letter-spacing: 0.01em;
   white-space: nowrap;
+
+  @media (min-width: 900px) {
+    height: 34px;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+  }
 
   &:hover {
     background: #f5f5ff;
@@ -420,8 +447,11 @@
     display: none;
   }
 
+  // When open: give enough height for content + dropdown panel
+  // overflow must be visible so the p-dropdown panel can escape the container
   &--open {
-    max-height: 400px;
+    max-height: 600px;
+    overflow: visible; // allows dropdown panel to render outside bounds
   }
 }
 

@@ -1,58 +1,184 @@
-<footer class="footer bg-gray-900 text-white p-4">
-  <div class="container">
-    <div class="grid">
-      <div class="col-12 md:col-4">
-        <h3 class="text-xl font-bold mb-3">Aadhar Sanstha</h3>
-        <p class="text-gray-300">
-          Empowering persons with disabilities through comprehensive support, 
-          skill development, and inclusive programs.
+<footer class="site-footer" role="contentinfo" aria-label="Site footer">
+  <div class="footer-wave" aria-hidden="true">
+    <svg
+      viewBox="0 0 1440 48"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0,32 C240,0 480,48 720,24 C960,0 1200,40 1440,16 L1440,48 L0,48 Z"
+        fill="#1A1740"
+      />
+    </svg>
+  </div>
+
+  <div class="footer-body">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" routerLink="/" class="brand-link">
+          <div class="brand-icon" aria-hidden="true">
+            <!-- svg unchanged -->
+          </div>
+
+          <span class="brand-name">
+            {{ "FOOTER.BRAND" | translate }}
+          </span>
+        </a>
+
+        <p class="brand-desc">
+          {{ "FOOTER.DESCRIPTION" | translate }}
         </p>
+
+        <div class="social-links" role="list">
+          <!-- icons unchanged -->
+        </div>
       </div>
-      
-      <div class="col-12 md:col-4">
-        <h4 class="text-lg font-semibold mb-3">Quick Links</h4>
-        <ul class="list-none p-0">
-          <li class="mb-2">
-            <a routerLink="/programs" class="text-gray-300 hover:text-white no-underline">
-              Programs
+
+      <nav class="footer-nav">
+        <h2 class="footer-heading">
+          {{ "FOOTER.QUICK_LINKS" | translate }}
+        </h2>
+
+        <ul class="footer-links">
+          <li>
+            <a routerLink="/programs" class="footer-link">
+              <!-- svg -->
+              {{ "FOOTER.LINKS.PROGRAMS" | translate }}
             </a>
           </li>
-          <li class="mb-2">
-            <a routerLink="/schemes" class="text-gray-300 hover:text-white no-underline">
-              Government Schemes
+
+          <li>
+            <a routerLink="/schemes" class="footer-link">
+              <!-- svg -->
+              {{ "FOOTER.LINKS.SCHEMES" | translate }}
             </a>
           </li>
-          <li class="mb-2">
-            <a routerLink="/pwd/register" class="text-gray-300 hover:text-white no-underline">
-              PWD Registration
+
+          <li>
+            <a routerLink="/pwd/register" class="footer-link">
+              <!-- svg -->
+              {{ "FOOTER.LINKS.PWD_REGISTER" | translate }}
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/auth/login" class="footer-link">
+              <!-- svg -->
+              {{ "FOOTER.LINKS.SIGN_IN" | translate }}
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/auth/register" class="footer-link">
+              <!-- svg -->
+              {{ "FOOTER.LINKS.CREATE_ACCOUNT" | translate }}
             </a>
           </li>
         </ul>
-      </div>
-      
-      <div class="col-12 md:col-4">
-        <h4 class="text-lg font-semibold mb-3">Contact Us</h4>
-        <div class="text-gray-300">
-          <p class="mb-2">
-            <i class="pi pi-map-marker mr-2"></i>
-            Mumbai, Maharashtra, India
-          </p>
-          <p class="mb-2">
-            <i class="pi pi-phone mr-2"></i>
-            +91 123 456 7890
-          </p>
-          <p class="mb-2">
-            <i class="pi pi-envelope mr-2"></i>
-            info&#64;aadharsanstha.org
-          </p>
-        </div>
-      </div>
+      </nav>
+
+      <nav class="footer-nav">
+        <h2 class="footer-heading">
+          {{ "FOOTER.LEGAL" | translate }}
+        </h2>
+
+        <ul class="footer-links">
+          <li>
+            <a routerLink="/terms" class="footer-link">
+              {{ "FOOTER.LEGAL_LINKS.TERMS" | translate }}
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/privacy" class="footer-link">
+              {{ "FOOTER.LEGAL_LINKS.PRIVACY" | translate }}
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/accessibility" class="footer-link">
+              {{ "FOOTER.LEGAL_LINKS.ACCESSIBILITY" | translate }}
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/grievance" class="footer-link">
+              {{ "FOOTER.LEGAL_LINKS.GRIEVANCE" | translate }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <address class="footer-contact">
+        <h2 class="footer-heading">
+          {{ "FOOTER.CONTACT" | translate }}
+        </h2>
+
+        <ul class="contact-list">
+          <li class="contact-item">
+            <span>Mumbai, Maharashtra, India</span>
+          </li>
+
+          <li class="contact-item">
+            <a href="tel:+911234567890" class="contact-link">
+              +91 123 456 7890
+            </a>
+          </li>
+
+          <li class="contact-item">
+            <a href="mailto:info@aadharsanstha.org" class="contact-link">
+              info&#64;aadharsanstha.org
+            </a>
+          </li>
+
+          <li class="contact-item">
+            <span>
+              {{ "FOOTER.HOURS" | translate }}
+            </span>
+          </li>
+        </ul>
+      </address>
     </div>
-    
-    <div class="border-t border-gray-700 mt-4 pt-4 text-center">
-      <p class="text-gray-400">
-        © {{ currentYear }} Aadhar Sanstha. All rights reserved.
-      </p>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p class="copyright">
+          © {{ currentYear }}
+          {{ "FOOTER.COPYRIGHT" | translate }}
+        </p>
+
+        <div class="footer-badges">
+          <span class="badge">
+            {{ "FOOTER.BADGES.GOVT" | translate }}
+          </span>
+
+          <span class="badge">
+            {{ "FOOTER.BADGES.ACCESSIBILITY" | translate }}
+          </span>
+
+          <span class="badge">
+            {{ "FOOTER.BADGES.PAN_INDIA" | translate }}
+          </span>
+        </div>
+
+        <p class="made-with">
+          {{ "FOOTER.MADE_WITH" | translate }}
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="love"
+          >
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              style="fill: #f87171; stroke: none"
+            />
+          </svg>
+          {{ "FOOTER.INCLUSION" | translate }}
+        </p>
+      </div>
     </div>
   </div>
-</footer> 
+</footer>

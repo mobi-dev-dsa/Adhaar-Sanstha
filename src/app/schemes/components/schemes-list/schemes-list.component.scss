@@ -46,7 +46,7 @@
   color: var(--text-primary);
   position: relative;
   overflow: hidden;
-  padding: 2.5rem 0 4rem;
+  padding: 2rem 0 3rem;
 }
 
 // ── Subtle background ──────────────────────────────────────────────────────────
@@ -711,6 +711,34 @@
   flex: none;
   width: auto;
   margin-top: 0.5rem;
+}
+
+// ── Mobile responsive ──────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+  .schemes-container {
+    padding: 1.25rem 0 2rem;
+  }
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+  .header-title {
+    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+  }
+  .header-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .filter-section {
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .filter-inner {
+    gap: 0.65rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
 }
 
 // ── Reduced motion ─────────────────────────────────────────────────────────────

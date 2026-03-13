@@ -18,7 +18,7 @@
         <p>{{ "AUTH.LOGIN_SUBTITLE" | translate }}</p>
       </header>
 
-      <!-- Server-level error (wrong password, account not found etc.) -->
+      <!-- Server error -->
       <div
         *ngIf="serverError"
         class="server-error"
@@ -33,7 +33,6 @@
           fill="none"
           stroke="currentColor"
           stroke-width="2"
-          aria-hidden="true"
         >
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="8" x2="12" y2="12" />
@@ -47,7 +46,7 @@
         (ngSubmit)="onSubmit()"
         novalidate
         class="login-form"
-        aria-label="Sign in to your account"
+        [attr.aria-label]="'AUTH.SIGN_IN' | translate"
       >
         <!-- Email -->
         <div
@@ -58,8 +57,9 @@
         >
           <label for="email" class="field-label">
             {{ "AUTH.EMAIL" | translate }}
-            <span class="req-star" aria-hidden="true">*</span>
+            <span class="req-star">*</span>
           </label>
+
           <div class="input-wrap">
             <svg
               class="input-ico"
@@ -69,11 +69,11 @@
               fill="none"
               stroke="currentColor"
               stroke-width="1.8"
-              aria-hidden="true"
             >
               <rect x="2" y="4" width="20" height="16" rx="2" />
               <path d="m2 7 10 7 10-7" />
             </svg>
+
             <input
               id="email"
               type="email"
@@ -91,6 +91,7 @@
               aria-describedby="err-email"
             />
           </div>
+
           <span
             id="err-email"
             class="field-error"
@@ -106,12 +107,12 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              aria-hidden="true"
             >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
+
             {{ "AUTH.ERRORS.INVALID_EMAIL" | translate }}
           </span>
         </div>
@@ -127,16 +128,14 @@
           <div class="label-row">
             <label for="password" class="field-label">
               {{ "AUTH.PASSWORD" | translate }}
-              <span class="req-star" aria-hidden="true">*</span>
+              <span class="req-star">*</span>
             </label>
-            <a
-              href="/auth/forgot-password"
-              routerLink="/auth/forgot-password"
-              class="forgot-link"
-            >
+
+            <a routerLink="/auth/forgot-password" class="forgot-link">
               {{ "AUTH.FORGOT_PASSWORD" | translate }}
             </a>
           </div>
+
           <p-password
             inputId="password"
             formControlName="password"
@@ -145,14 +144,15 @@
             [feedback]="false"
             [inputStyleClass]="'field-input'"
             [style]="{ width: '100%' }"
-            [attr.aria-required]="'true'"
-            [attr.aria-describedby]="'err-password'"
+            aria-required="true"
+            aria-describedby="err-password"
             [attr.aria-invalid]="
               (loginForm.get('password')?.invalid &&
                 loginForm.get('password')?.touched) ||
               null
             "
           ></p-password>
+
           <span
             id="err-password"
             class="field-error"
@@ -169,39 +169,27 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              aria-hidden="true"
             >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            {{ "AUTH.ERRORS.PASSWORD_MIN" | translate }}
+
+            {{ "AUTH.ERRORS.PASSWORD_REQUIRED" | translate }}
           </span>
         </div>
 
-        <!-- Resend verification -->
-        <div
-          class="resend-block"
-          *ngIf="showResendEmail"
-          role="region"
-          aria-label="Email verification"
-        >
-          <p class="resend-text" id="resend-desc">
+        <!-- Resend email -->
+        <div class="resend-block" *ngIf="showResendEmail" role="region">
+          <p class="resend-text">
             {{ "AUTH.RESEND_PROMPT" | translate }}
           </p>
+
           <button
             type="button"
             class="resend-btn"
             (click)="resendConfirmation()"
             [disabled]="loading || sendingEmail"
-            [attr.aria-label]="
-              sendingEmail
-                ? ('AUTH.SENDING' | translate)
-                : ('AUTH.RESEND_VERIFICATION' | translate)
-            "
-            [attr.aria-busy]="sendingEmail ? 'true' : null"
-            [attr.aria-disabled]="loading || sendingEmail ? 'true' : null"
-            aria-describedby="resend-desc"
           >
             <svg
               *ngIf="sendingEmail"
@@ -209,7 +197,6 @@
               width="14"
               height="14"
               viewBox="0 0 24 24"
-              aria-hidden="true"
             >
               <circle
                 cx="12"
@@ -222,6 +209,7 @@
                 stroke-dashoffset="8"
               />
             </svg>
+
             {{
               sendingEmail
                 ? ("AUTH.SENDING" | translate)
@@ -236,13 +224,6 @@
             type="submit"
             class="submit-btn"
             [disabled]="loginForm.invalid || loading"
-            [attr.aria-busy]="loading ? 'true' : null"
-            [attr.aria-label]="
-              loading
-                ? ('AUTH.SIGNING_IN' | translate)
-                : ('AUTH.SIGN_IN' | translate)
-            "
-            [attr.aria-disabled]="loginForm.invalid || loading ? 'true' : null"
           >
             <svg
               *ngIf="loading"
@@ -250,7 +231,6 @@
               width="20"
               height="20"
               viewBox="0 0 24 24"
-              aria-hidden="true"
             >
               <circle
                 cx="12"
@@ -263,11 +243,15 @@
                 stroke-dashoffset="8"
               />
             </svg>
-            <span>{{
-              loading
-                ? ("AUTH.SIGNING_IN" | translate)
-                : ("AUTH.SIGN_IN" | translate)
-            }}</span>
+
+            <span>
+              {{
+                loading
+                  ? ("AUTH.SIGNING_IN" | translate)
+                  : ("AUTH.SIGN_IN" | translate)
+              }}
+            </span>
+
             <svg
               *ngIf="!loading"
               class="btn-arrow"
@@ -277,8 +261,6 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2.2"
-              stroke-linecap="round"
-              aria-hidden="true"
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
@@ -286,11 +268,7 @@
 
           <p class="signup-prompt">
             {{ "AUTH.NO_ACCOUNT" | translate }}
-            <a
-              href="/auth/register"
-              routerLink="/auth/register"
-              class="signup-link"
-            >
+            <a routerLink="/auth/register" class="signup-link">
               {{ "AUTH.SIGN_UP_HERE" | translate }}
             </a>
           </p>

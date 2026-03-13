@@ -9,47 +9,55 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardModule, ButtonModule, CarouselModule, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    CardModule,
+    ButtonModule,
+    CarouselModule,
+    TranslateModule,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   ngOnInit() {
     console.log('HomeComponent initialized');
   }
+
   heroImages = [
-    { src: 'assets/images/hero1.jpg', alt: 'Skill Development' },
-    { src: 'assets/images/hero2.jpg', alt: 'Healthcare Support' },
-    { src: 'assets/images/hero3.jpg', alt: 'Community Inclusion' }
+    { src: 'assets/images/hero1.jpg', alt: 'HOME.FEATURES.SKILL_TITLE' },
+    { src: 'assets/images/hero2.jpg', alt: 'HOME.FEATURES.HEALTH_TITLE' },
+    { src: 'assets/images/hero3.jpg', alt: 'HOME.FEATURES.COMMUNITY_TITLE' },
   ];
 
   features = [
     {
       icon: 'pi pi-users',
-      title: 'Community Support',
-      description: 'Building a supportive community for persons with disabilities'
+      title: 'HOME.FEATURES.COMMUNITY_TITLE',
+      description: 'HOME.FEATURES.COMMUNITY_DESC',
     },
     {
       icon: 'pi pi-graduation-cap',
-      title: 'Skill Development',
-      description: 'Comprehensive training programs for personal and professional growth'
+      title: 'HOME.FEATURES.SKILL_TITLE',
+      description: 'HOME.FEATURES.SKILL_DESC',
     },
     {
       icon: 'pi pi-heart',
-      title: 'Healthcare Access',
-      description: 'Medical support and assistive devices for better quality of life'
+      title: 'HOME.FEATURES.HEALTH_TITLE',
+      description: 'HOME.FEATURES.HEALTH_DESC',
     },
     {
       icon: 'pi pi-briefcase',
-      title: 'Employment Assistance',
-      description: 'Job placement and workplace accommodation support'
-    }
+      title: 'HOME.FEATURES.EMPLOYMENT_TITLE',
+      description: 'HOME.FEATURES.EMPLOYMENT_DESC',
+    },
   ];
 
   stats = [
-    { number: '500+', label: 'PWDs Supported' },
-    { number: '50+', label: 'Training Programs' },
-    { number: '1000+', label: 'Assistive Devices' },
-    { number: '200+', label: 'Job Placements' }
+    { number: '500+', label: 'HOME.STATS.PWD' },
+    { number: '50+', label: 'HOME.STATS.TRAINING' },
+    { number: '1000+', label: 'HOME.STATS.DEVICES' },
+    { number: '200+', label: 'HOME.STATS.PLACEMENTS' },
   ];
-} 
+}

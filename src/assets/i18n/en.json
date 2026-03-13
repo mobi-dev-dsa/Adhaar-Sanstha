@@ -10,26 +10,85 @@
     "HERO_TITLE": "Empowering Persons with Disabilities",
     "HERO_SUBTITLE": "Comprehensive support, skill development, and inclusive programs for a better tomorrow",
     "GET_STARTED": "Get Started",
-    "LEARN_MORE": "Learn More"
+    "LEARN_MORE": "Learn More",
+
+    "BADGE": "Aadhar Sanstha",
+
+    "TRUST": {
+      "GOV_REGISTERED": "Government Registered",
+      "FREE_COST": "Free of Cost",
+      "PAN_INDIA": "Pan-India Support"
+    },
+
+    "FEATURES": {
+      "TAG": "What We Offer",
+      "TITLE": "Our Services",
+      "SUBTITLE": "Comprehensive support designed around the needs of every individual",
+
+      "COMMUNITY_TITLE": "Community Support",
+      "COMMUNITY_DESC": "Building a supportive community for persons with disabilities",
+
+      "SKILL_TITLE": "Skill Development",
+      "SKILL_DESC": "Comprehensive training programs for personal and professional growth",
+
+      "HEALTH_TITLE": "Healthcare Access",
+      "HEALTH_DESC": "Medical support and assistive devices for better quality of life",
+
+      "EMPLOYMENT_TITLE": "Employment Assistance",
+      "EMPLOYMENT_DESC": "Job placement and workplace accommodation support"
+    },
+
+    "STATS": {
+      "PWD": "PWDs Supported",
+      "TRAINING": "Training Programs",
+      "DEVICES": "Assistive Devices",
+      "PLACEMENTS": "Job Placements"
+    },
+
+    "CTA": {
+      "TITLE": "Ready to Get Started?",
+      "SUBTITLE": "Join our community and access comprehensive support for persons with disabilities. Registration is free and takes less than 2 minutes.",
+      "REGISTER": "Register Now — It's Free",
+      "ALREADY": "Already registered?",
+      "LOGIN": "Sign in here"
+    }
   },
   "AUTH": {
     "LOGIN_TITLE": "Welcome Back",
     "LOGIN_SUBTITLE": "Sign in to your account",
+
     "REGISTER_TITLE": "Create your account",
     "REGISTER_SUBTITLE": "Join Aadhar Sanstha today",
+
     "EMAIL": "Email",
     "PASSWORD": "Password",
     "PASSWORD_PLACEHOLDER": "Enter your password",
+
     "CONFIRM_PASSWORD": "Confirm Password",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Re-enter your password",
+
     "SIGN_IN": "Sign In",
+    "SIGNING_IN": "Signing in...",
+
     "CREATE_ACCOUNT": "Create your account",
+
     "FORGOT_PASSWORD": "Forgot Password?",
+
     "NO_ACCOUNT": "Don't have an account?",
     "HAVE_ACCOUNT": "Already have an account?",
+
     "SIGN_UP_HERE": "Sign up here",
     "SIGN_IN_HERE": "Sign in here",
-    "CONFIRM_PASSWORD_PLACEHOLDER": "Re-enter your password",
-    "CONFIRM_PASSWORD_MISMATCH": "Passwords do not match"
+
+    "RESEND_PROMPT": "Didn't receive the verification email?",
+    "RESEND_VERIFICATION": "Resend verification email",
+    "SENDING": "Sending...",
+
+    "ERRORS": {
+      "INVALID_EMAIL": "Please enter a valid email address",
+      "PASSWORD_REQUIRED": "Password is required",
+      "CONFIRM_PASSWORD_MISMATCH": "Passwords do not match"
+    }
   },
   "REGISTER_FORM": {
     "FIRST_NAME": "First Name",
@@ -124,5 +183,47 @@
     "CLEAR": "Clear",
     "SUBMIT": "Submit",
     "RESET": "Reset"
+  },
+  "FOOTER": {
+    "BRAND": "Aadhar Sanstha",
+    "DESCRIPTION": "Empowering persons with disabilities through comprehensive support, skill development, and inclusive programs across India.",
+
+    "QUICK_LINKS": "Quick Links",
+
+    "LINKS": {
+      "PROGRAMS": "Programs",
+      "SCHEMES": "Government Schemes",
+      "PWD_REGISTER": "PWD Registration",
+      "SIGN_IN": "Sign In",
+      "CREATE_ACCOUNT": "Create Account"
+    },
+
+    "LEGAL": "Legal",
+
+    "LEGAL_LINKS": {
+      "TERMS": "Terms of Service",
+      "PRIVACY": "Privacy Policy",
+      "ACCESSIBILITY": "Accessibility Statement",
+      "GRIEVANCE": "Grievance Redressal"
+    },
+
+    "CONTACT": "Contact Us",
+
+    "ADDRESS": "Mumbai, Maharashtra, India",
+    "PHONE": "+91 123 456 7890",
+    "EMAIL": "info@aadharsanstha.org",
+
+    "HOURS": "Mon–Sat, 9 AM – 6 PM IST",
+
+    "COPYRIGHT": "Aadhar Sanstha. All rights reserved.",
+
+    "BADGES": {
+      "GOVT": "Govt. Registered",
+      "ACCESSIBILITY": "WCAG 2.1 AA",
+      "PAN_INDIA": "Pan-India"
+    },
+
+    "MADE_WITH": "Made with",
+    "INCLUSION": "for inclusion"
   }
 }
