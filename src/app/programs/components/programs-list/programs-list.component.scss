@@ -1,158 +1,669 @@
-.programs-list {
-  padding: 2rem 0;
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap");
 
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
+:host {
+  --brand: #4f46e5;
+  --brand-dark: #3730a3;
+  --brand-light: #eef2ff;
+  --brand-mid: #818cf8;
+  --surface: #ffffff;
+  --surface-soft: #fafafa;
+  --bg: #f4f4f8;
+  --border: #e2e2ef;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --error: #dc2626;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 2px 8px rgba(79, 70, 229, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(79, 70, 229, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-hover:
+    0 16px 40px rgba(79, 70, 229, 0.14), 0 4px 12px rgba(0, 0, 0, 0.07);
+  --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    h1 {
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-    }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-    p {
-      color: var(--text-color-secondary);
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+// ── Outer container ────────────────────────────────────────────────────────────
+.programs-container {
+  min-height: 100%;
+  background: var(--bg);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 0 3rem;
+}
+
+// ── Subtle background ──────────────────────────────────────────────────────────
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, #c7c5e8 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.28;
+}
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+}
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(79, 70, 229, 0.06);
+  top: -180px;
+  left: -160px;
+}
+.blob-2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(129, 140, 248, 0.06);
+  bottom: -120px;
+  right: -120px;
+}
+
+// ── Inner container ───────────────────────────────────────────────────────────
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+// ── Page Header ───────────────────────────────────────────────────────────────
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+.header-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: var(--brand-light);
+  border-radius: 4px;
+  padding: 0.25rem 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.header-title {
+  font-family: "Fraunces", serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.035em;
+  margin: 0 0 0.65rem;
+  line-height: 1.15;
+}
+
+.header-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
-
-  .filter-section {
-    text-align: center;
-    margin-bottom: 2rem;
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--text-color);
-    }
-
-    p-dropdown {
-      min-width: 200px;
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .program-card {
-    height: 100%;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+// ── Filter Section ────────────────────────────────────────────────────────────
+.filter-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.filter-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  svg {
+    color: var(--brand);
+  }
+}
+
+// Filter dropdown override
+::ng-deep .filter-dropdown {
+  &.p-dropdown {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    height: 40px;
+    min-width: 200px;
+    background: var(--surface-soft);
+    transition:
+      border-color var(--t),
+      box-shadow var(--t);
 
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border-color: #c7c6e4;
+    }
+    &.p-focus,
+    &:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      outline: none;
     }
 
-    .program-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
+    .p-dropdown-label {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      padding: 0 0.75rem;
+      line-height: 38px;
     }
 
-    .program-icon {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--surface-ground);
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-
-      i {
-        font-size: 4rem;
-        color: var(--primary-color);
-      }
-    }
-
-    .program-description {
-      color: var(--text-color);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .program-details {
-      margin-bottom: 1rem;
-
-      .detail-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
-        color: var(--text-color-secondary);
-
-        i {
-          margin-right: 0.5rem;
-          color: var(--primary-color);
-        }
-      }
-    }
-
-    .program-features {
-      h4 {
-        color: var(--text-color);
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-        li {
-          color: var(--text-color-secondary);
-          font-size: 0.85rem;
-          margin-bottom: 0.25rem;
-          padding-left: 1rem;
-          position: relative;
-
-          &::before {
-            content: "•";
-            color: var(--primary-color);
-            position: absolute;
-            left: 0;
-          }
-        }
-      }
-    }
-
-    .card-footer {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-color-secondary);
-
-    h3 {
-      margin: 1rem 0;
-      color: var(--text-color);
-    }
-
-    p {
-      margin-bottom: 1.5rem;
+    .p-dropdown-trigger {
+      color: var(--text-muted);
     }
   }
 }
 
-:host ::ng-deep {
-  .p-card {
-    .p-card-header {
-      padding: 0;
+// Panel must be portalled to body — override globally so it always appears on top
+::ng-deep .p-dropdown-panel {
+  z-index: 9999 !important;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 32px rgba(79, 70, 229, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  .p-dropdown-items {
+    padding: 0.35rem;
+  }
+
+  .p-dropdown-item {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    padding: 0.6rem 0.85rem;
+    transition:
+      background var(--t),
+      color var(--t);
+
+    &:hover {
+      background: var(--brand-light);
+      color: var(--brand);
     }
 
-    .p-card-content {
-      padding: 1.5rem;
-    }
-
-    .p-card-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--surface-border);
+    &.p-highlight {
+      background: var(--brand-light);
+      color: var(--brand);
+      font-weight: 600;
     }
   }
-} 
+}
+
+.clear-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 0.85rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+    background: var(--brand-light);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+.results-count {
+  margin: 0.75rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+
+  strong {
+    color: var(--text-secondary);
+  }
+}
+
+// ── Programs Grid ─────────────────────────────────────────────────────────────
+.programs-grid {
+  display: grid;
+  grid-template-columns: 1fr; // mobile: 1 col
+  gap: 1.25rem;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr); // tablet: 2 col
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); // desktop: 3 col
+  }
+}
+
+// ── Program Card ──────────────────────────────────────────────────────────────
+.program-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--t),
+    box-shadow var(--t),
+    border-color var(--t);
+  animation: cardIn 0.4s ease both;
+  position: relative;
+
+  // Top accent bar on hover
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand) 0%, var(--brand-mid) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: 1;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(79, 70, 229, 0.18);
+    &::before {
+      transform: scaleX(1);
+    }
+    .card-icon-wrap {
+      background: linear-gradient(135deg, var(--brand-light) 0%, #e0e7ff 100%);
+    }
+  }
+
+  &:focus-within {
+    border-color: var(--brand);
+    box-shadow:
+      0 0 0 3px rgba(79, 70, 229, 0.1),
+      var(--shadow-md);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Card Media ────────────────────────────────────────────────────────────────
+.card-media {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+
+  @media (min-width: 600px) {
+    height: 200px;
+  }
+}
+
+.card-icon-wrap {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f0ff 0%, #eef2ff 100%);
+  transition: background var(--t);
+
+  i {
+    font-size: 3.5rem;
+    color: var(--brand);
+  }
+
+  @media (min-width: 600px) {
+    height: 180px;
+  }
+}
+
+.category-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  backdrop-filter: blur(4px);
+}
+
+// ── Card Body ─────────────────────────────────────────────────────────────────
+.card-body {
+  flex: 1;
+  padding: 1.25rem 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+  // Clamp to 3 lines on mobile, full on desktop
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ── Card Meta ─────────────────────────────────────────────────────────────────
+.card-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+
+  svg {
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+}
+
+// ── Card Features ─────────────────────────────────────────────────────────────
+.card-features {
+  background: var(--brand-light);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+}
+
+.features-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0 0 0.5rem;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+
+    svg {
+      color: var(--brand);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+}
+
+// ── Card Footer ───────────────────────────────────────────────────────────────
+.card-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.btn-primary-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 1.1rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--brand);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+  transition:
+    background var(--t),
+    transform var(--t),
+    box-shadow var(--t);
+  flex: 1;
+  min-width: 0;
+
+  &:hover {
+    background: var(--brand-dark);
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.38);
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
+  &:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 3px;
+  }
+}
+
+.btn-outline-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 1.1rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--brand);
+  background: transparent;
+  border: 1.5px solid rgba(79, 70, 229, 0.35);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--t);
+  flex: 1;
+  min-width: 0;
+
+  &:hover {
+    background: var(--brand-light);
+    border-color: var(--brand);
+  }
+  &:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 3px;
+  }
+}
+
+// ── Empty State ───────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  animation: fadeUp 0.4s ease both;
+}
+
+.empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--brand-light);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.12);
+}
+
+.empty-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.empty-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.empty-state .btn-outline-card {
+  flex: none;
+  width: auto;
+  margin-top: 0.5rem;
+}
+
+// ── Mobile responsive ──────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+  .programs-container {
+    padding: 1.25rem 0 2rem;
+  }
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+  .header-title {
+    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+  }
+  .header-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .filter-section {
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .filter-inner {
+    gap: 0.65rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ── Forced colours (Windows High Contrast) ─────────────────────────────────────
+@media (forced-colors: active) {
+  .program-card {
+    border: 2px solid ButtonText;
+  }
+  .btn-primary-card {
+    border: 2px solid ButtonText;
+  }
+}

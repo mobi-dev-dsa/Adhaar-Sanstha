@@ -1,86 +1,498 @@
 <div class="register-container">
+  <!-- Subtle background -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-grid"></div>
+  </div>
+
   <div class="register-wrapper">
-    <p-card styleClass="register-card">
-      <ng-template pTemplate="header">
-        <div class="text-center p-4">
-          <h1 class="text-2xl font-bold text-primary">Create Account</h1>
-          <p class="text-gray-600 mt-2">Join Aadhar Sanstha today</p>
-        </div>
-      </ng-template>
+    <main
+      class="form-panel"
+      id="main-content"
+      role="main"
+      aria-labelledby="register-heading"
+      tabindex="-1"
+    >
+      <header class="form-header">
+        <h1 id="register-heading">{{ "AUTH.REGISTER_TITLE" | translate }}</h1>
+        <p>
+          Fields marked <abbr title="required" class="req-star">*</abbr> are
+          required
+        </p>
+      </header>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4">
-        <div class="field mb-4">
-          <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <input 
-            id="email"
-            type="email" 
-            pInputText 
-            formControlName="email"
-            placeholder="Enter your email"
-            class="w-full"
-            [class.ng-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-          <small 
-            class="text-red-500" 
-            *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-            Please enter a valid email address
-          </small>
+      <!-- Server-level error (e.g. email already taken) -->
+      <div
+        *ngIf="serverError"
+        class="server-error"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ serverError }}
+      </div>
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        class="reg-form"
+        aria-label="Create your account"
+      >
+        <!-- ── Personal Details ── -->
+        <div class="section-divider col-span-2" aria-hidden="true">
+          <span>{{ "REGISTER_FORM.PERSONAL_DETAILS" | translate }}</span>
         </div>
 
-        <div class="field mb-4">
-          <label for="password" class="block text-sm font-medium mb-2">Password</label>
-          <p-password 
-            id="password"
+        <!-- First Name -->
+        <div
+          class="field"
+          [class.field--error]="
+            registerForm.get('firstName')?.invalid &&
+            registerForm.get('firstName')?.touched
+          "
+        >
+          <label for="firstName" class="field-label">
+            {{ "REGISTER_FORM.FIRST_NAME" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="firstName"
+            type="text"
+            pInputText
+            formControlName="firstName"
+            placeholder="{{
+              'REGISTER_FORM.FIRST_NAME_PLACEHOLDER' | translate
+            }}"
+            class="field-input"
+            autocomplete="given-name"
+            aria-required="true"
+            [attr.aria-invalid]="
+              (registerForm.get('firstName')?.invalid &&
+                registerForm.get('firstName')?.touched) ||
+              null
+            "
+            aria-describedby="err-firstName"
+          />
+          <span
+            id="err-firstName"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              registerForm.get('firstName')?.invalid &&
+              registerForm.get('firstName')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ "REGISTER_FORM.FIRST_NAME_ERROR" | translate }}
+          </span>
+        </div>
+
+        <!-- Middle Name -->
+        <div class="field">
+          <label for="middleName" class="field-label">
+            {{ "REGISTER_FORM.MIDDLE_NAME" | translate }}
+            <span class="field-optional"
+              >({{ "REGISTER_FORM.OPTIONAL" | translate }})</span
+            >
+          </label>
+          <input
+            id="middleName"
+            type="text"
+            pInputText
+            formControlName="middleName"
+            placeholder="{{
+              'REGISTER_FORM.MIDDLE_NAME_PLACEHOLDER' | translate
+            }}"
+            class="field-input"
+            autocomplete="additional-name"
+            aria-required="false"
+          />
+        </div>
+
+        <!-- Surname -->
+        <div
+          class="field"
+          [class.field--error]="
+            registerForm.get('lastName')?.invalid &&
+            registerForm.get('lastName')?.touched
+          "
+        >
+          <label for="lastName" class="field-label">
+            {{ "REGISTER_FORM.SURNAME" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="lastName"
+            type="text"
+            pInputText
+            formControlName="lastName"
+            placeholder="{{ 'REGISTER_FORM.SURNAME_PLACEHOLDER' | translate }}"
+            class="field-input"
+            autocomplete="family-name"
+            aria-required="true"
+            [attr.aria-invalid]="
+              (registerForm.get('lastName')?.invalid &&
+                registerForm.get('lastName')?.touched) ||
+              null
+            "
+            aria-describedby="err-lastName"
+          />
+          <span
+            id="err-lastName"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              registerForm.get('lastName')?.invalid &&
+              registerForm.get('lastName')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ "REGISTER_FORM.SURNAME_ERROR" | translate }}
+          </span>
+        </div>
+
+        <!-- ── Contact Details ── -->
+        <div class="section-divider col-span-2" aria-hidden="true">
+          <span>{{ "REGISTER_FORM.CONTACT_DETAILS" | translate }}</span>
+        </div>
+
+        <!-- Email -->
+        <div
+          class="field"
+          [class.field--error]="
+            registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched
+          "
+        >
+          <label for="email" class="field-label">
+            {{ "REGISTER_FORM.EMAIL" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrap">
+            <svg
+              class="input-ico"
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m2 7 10 7 10-7" />
+            </svg>
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="jane@example.com"
+              class="field-input field-input--icon"
+              autocomplete="email"
+              aria-required="true"
+              [attr.aria-invalid]="
+                (registerForm.get('email')?.invalid &&
+                  registerForm.get('email')?.touched) ||
+                null
+              "
+              aria-describedby="err-email"
+            />
+          </div>
+          <span
+            id="err-email"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              registerForm.get('email')?.invalid &&
+              registerForm.get('email')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ "REGISTER_FORM.EMAIL_ERROR" | translate }}
+          </span>
+        </div>
+
+        <!-- Mobile -->
+        <div class="field">
+          <label for="mobile" class="field-label">
+            {{ "REGISTER_FORM.MOBILE" | translate }}
+            <span class="field-optional"
+              >({{ "REGISTER_FORM.OPTIONAL" | translate }})</span
+            >
+          </label>
+          <div class="input-wrap">
+            <svg
+              class="input-ico"
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <circle cx="12" cy="18" r="1" />
+            </svg>
+            <input
+              id="mobile"
+              type="tel"
+              pInputText
+              formControlName="mobile"
+              placeholder="+91 98765 43210"
+              class="field-input field-input--icon"
+              autocomplete="tel"
+              aria-required="false"
+            />
+          </div>
+        </div>
+
+        <!-- ── Security ── -->
+        <div class="section-divider col-span-2" aria-hidden="true">
+          <span>{{ "REGISTER_FORM.SECURITY" | translate }}</span>
+        </div>
+
+        <!-- Password -->
+        <div
+          class="field"
+          [class.field--error]="
+            registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched
+          "
+        >
+          <label for="password" class="field-label">
+            {{ "AUTH.PASSWORD" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
+          </label>
+          <p-password
+            inputId="password"
             formControlName="password"
-            placeholder="Enter your password"
+            placeholder="{{ 'REGISTER_FORM.PASSWORD_PLACEHOLDER' | translate }}"
             [toggleMask]="true"
             [feedback]="true"
-            class="w-full">
-          </p-password>
-          <small 
-            class="text-red-500" 
-            *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-            Password must be at least 6 characters
-          </small>
+            [inputStyleClass]="'field-input'"
+            [style]="{ width: '100%' }"
+            [attr.aria-required]="'true'"
+            [attr.aria-describedby]="'hint-password err-password'"
+            [attr.aria-invalid]="
+              (registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.touched) ||
+              null
+            "
+          ></p-password>
+          <span id="hint-password" class="field-hint">
+            {{ "REGISTER_FORM.PASSWORD_HINT" | translate }}
+          </span>
+          <span
+            id="err-password"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ "REGISTER_FORM.PASSWORD_ERROR" | translate }}
+          </span>
         </div>
 
-        <div class="field mb-4">
-          <label for="confirmPassword" class="block text-sm font-medium mb-2">Confirm Password</label>
-          <p-password 
-            id="confirmPassword"
+        <!-- Confirm Password -->
+        <div
+          class="field"
+          [class.field--error]="
+            registerForm.get('confirmPassword')?.errors?.['passwordMismatch'] &&
+            registerForm.get('confirmPassword')?.touched
+          "
+        >
+          <label for="confirmPassword" class="field-label">
+            {{ "AUTH.CONFIRM_PASSWORD" | translate }}
+            <span class="req-star" aria-hidden="true">*</span>
+          </label>
+          <p-password
+            inputId="confirmPassword"
             formControlName="confirmPassword"
-            placeholder="Confirm your password"
+            placeholder="{{
+              'REGISTER_FORM.CONFIRM_PASSWORD_PLACEHOLDER' | translate
+            }}"
             [toggleMask]="true"
             [feedback]="false"
-            class="w-full">
-          </p-password>
-          <small 
-            class="text-red-500" 
-            *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched">
-            Passwords do not match
-          </small>
+            [inputStyleClass]="'field-input'"
+            [style]="{ width: '100%' }"
+            [attr.aria-required]="'true'"
+            [attr.aria-describedby]="'err-confirmPassword'"
+            [attr.aria-invalid]="
+              (registerForm.get('confirmPassword')?.errors?.[
+                'passwordMismatch'
+              ] &&
+                registerForm.get('confirmPassword')?.touched) ||
+              null
+            "
+          ></p-password>
+          <span
+            id="err-confirmPassword"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              registerForm.get('confirmPassword')?.errors?.[
+                'passwordMismatch'
+              ] && registerForm.get('confirmPassword')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ "AUTH.CONFIRM_PASSWORD_MISMATCH" | translate }}
+          </span>
         </div>
 
-        <p-button 
-          type="submit"
-          label="Create Account"
-          [loading]="loading"
-          [disabled]="registerForm.invalid || loading"
-          class="w-full mb-3">
-        </p-button>
+        <!-- ── Submit ── -->
+        <div class="form-footer col-span-2">
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="registerForm.invalid || loading"
+            [attr.aria-busy]="loading ? 'true' : null"
+            [attr.aria-label]="
+              loading
+                ? ('REGISTER_FORM.REGISTERING_BUTTON_TEXT' | translate)
+                : ('REGISTER_FORM.REGISTER_BUTTON_TEXT' | translate)
+            "
+            [attr.aria-disabled]="
+              registerForm.invalid || loading ? 'true' : null
+            "
+          >
+            <svg
+              *ngIf="loading"
+              class="spin"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="white"
+                stroke-width="2.5"
+                fill="none"
+                stroke-dasharray="31.4"
+                stroke-dashoffset="8"
+              />
+            </svg>
+            <span>{{
+              loading
+                ? ("REGISTER_FORM.REGISTERING_BUTTON_TEXT" | translate)
+                : ("REGISTER_FORM.REGISTER_BUTTON_TEXT" | translate)
+            }}</span>
+            <svg
+              *ngIf="!loading"
+              class="btn-arrow"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
 
-        <p-divider></p-divider>
-
-        <div class="text-center mt-4">
-          <p class="text-gray-600">
-            Already have an account? 
-            <a routerLink="/auth/login" class="text-primary font-medium no-underline">
-              Sign in here
+          <p class="signin-prompt">
+            {{ "AUTH.HAVE_ACCOUNT" | translate }}
+            <a href="/auth/login" routerLink="/auth/login" class="signin-link">
+              {{ "AUTH.SIGN_IN" | translate }}
             </a>
+          </p>
+
+          <p class="terms-text">
+            By creating an account you agree to our
+            <a href="/terms" routerLink="/terms">Terms of Service</a>
+            and
+            <a href="/privacy" routerLink="/privacy">Privacy Policy</a>.
           </p>
         </div>
       </form>
-    </p-card>
+    </main>
   </div>
 
   <p-toast></p-toast>
-</div> 
+</div>

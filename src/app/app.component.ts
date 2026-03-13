@@ -9,8 +9,11 @@ import { LoaderComponent } from './shared/components/loader/loader.component';
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, FooterComponent, LoaderComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'Aadhar Sanstha';
+  ngOnInit() {
+    console.log('AppComponent initialized');
+  }
 }

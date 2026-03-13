@@ -7,26 +7,111 @@
     "LOGIN": "लॉगिन"
   },
   "HOME": {
-    "HERO_TITLE": "दिव्यांगजनों को सशक्त बनाना",
-    "HERO_SUBTITLE": "बेहतर कल के लिए व्यापक समर्थन, कौशल विकास और समावेशी कार्यक्रम",
+    "HERO_TITLE": "दिव्यांग व्यक्तियों को सशक्त बनाना",
+    "HERO_SUBTITLE": "बेहतर भविष्य के लिए समग्र सहायता, कौशल विकास और समावेशी कार्यक्रम",
     "GET_STARTED": "शुरू करें",
-    "LEARN_MORE": "और जानें"
+    "LEARN_MORE": "और जानें",
+
+    "BADGE": "आधार संस्था",
+
+    "TRUST": {
+      "GOV_REGISTERED": "सरकार द्वारा पंजीकृत",
+      "FREE_COST": "पूर्णतः निःशुल्क",
+      "PAN_INDIA": "पूरे भारत में सहायता"
+    },
+
+    "FEATURES": {
+      "TAG": "हम क्या प्रदान करते हैं",
+      "TITLE": "हमारी सेवाएँ",
+      "SUBTITLE": "हर व्यक्ति की जरूरतों के अनुसार व्यापक सहायता",
+
+      "COMMUNITY_TITLE": "सामुदायिक सहयोग",
+      "COMMUNITY_DESC": "दिव्यांग व्यक्तियों के लिए सहयोगी समुदाय का निर्माण",
+
+      "SKILL_TITLE": "कौशल विकास",
+      "SKILL_DESC": "व्यक्तिगत और व्यावसायिक विकास के लिए प्रशिक्षण कार्यक्रम",
+
+      "HEALTH_TITLE": "स्वास्थ्य सेवा सहायता",
+      "HEALTH_DESC": "बेहतर जीवन गुणवत्ता के लिए चिकित्सा सहायता और सहायक उपकरण",
+
+      "EMPLOYMENT_TITLE": "रोजगार सहायता",
+      "EMPLOYMENT_DESC": "नौकरी प्राप्ति और कार्यस्थल समर्थन"
+    },
+
+    "STATS": {
+      "PWD": "समर्थित दिव्यांग",
+      "TRAINING": "प्रशिक्षण कार्यक्रम",
+      "DEVICES": "सहायक उपकरण",
+      "PLACEMENTS": "नौकरी उपलब्ध"
+    },
+
+    "CTA": {
+      "TITLE": "क्या आप शुरू करने के लिए तैयार हैं?",
+      "SUBTITLE": "हमारे समुदाय से जुड़ें और दिव्यांग व्यक्तियों के लिए व्यापक सहायता प्राप्त करें। पंजीकरण निःशुल्क है और केवल 2 मिनट लगता है।",
+      "REGISTER": "अभी पंजीकरण करें — निःशुल्क",
+      "ALREADY": "पहले से पंजीकृत हैं?",
+      "LOGIN": "यहाँ लॉगिन करें"
+    }
   },
   "AUTH": {
-    "LOGIN_TITLE": "वापसी पर स्वागत है",
+    "LOGIN_TITLE": "वापस स्वागत है",
     "LOGIN_SUBTITLE": "अपने खाते में साइन इन करें",
-    "REGISTER_TITLE": "खाता बनाएं",
-    "REGISTER_SUBTITLE": "आज ही आधार संस्था में शामिल हों",
+
+    "REGISTER_TITLE": "अपना खाता बनाएं",
+    "REGISTER_SUBTITLE": "आज ही आधार संस्था से जुड़ें",
+
     "EMAIL": "ईमेल",
     "PASSWORD": "पासवर्ड",
+    "PASSWORD_PLACEHOLDER": "अपना पासवर्ड दर्ज करें",
+
     "CONFIRM_PASSWORD": "पासवर्ड की पुष्टि करें",
-    "SIGN_IN": "साइन इन",
-    "CREATE_ACCOUNT": "खाता बनाएं",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "पासवर्ड दोबारा दर्ज करें",
+
+    "SIGN_IN": "साइन इन करें",
+    "SIGNING_IN": "साइन इन किया जा रहा है...",
+
+    "CREATE_ACCOUNT": "अपना खाता बनाएं",
+
     "FORGOT_PASSWORD": "पासवर्ड भूल गए?",
-    "NO_ACCOUNT": "खाता नहीं है?",
-    "HAVE_ACCOUNT": "पहले से खाता है?",
-    "SIGN_UP_HERE": "यहां साइन अप करें",
-    "SIGN_IN_HERE": "यहां साइन इन करें"
+
+    "NO_ACCOUNT": "क्या आपके पास खाता नहीं है?",
+    "HAVE_ACCOUNT": "क्या आपके पास पहले से खाता है?",
+
+    "SIGN_UP_HERE": "यहाँ साइन अप करें",
+    "SIGN_IN_HERE": "यहाँ साइन इन करें",
+
+    "RESEND_PROMPT": "क्या आपको सत्यापन ईमेल नहीं मिला?",
+    "RESEND_VERIFICATION": "सत्यापन ईमेल पुनः भेजें",
+    "SENDING": "भेजा जा रहा है...",
+
+    "ERRORS": {
+      "INVALID_EMAIL": "कृपया एक मान्य ईमेल पता दर्ज करें",
+      "PASSWORD_REQUIRED": "पासवर्ड आवश्यक है",
+      "CONFIRM_PASSWORD_MISMATCH": "पासवर्ड मेल नहीं खाते"
+    }
+  },
+  "REGISTER_FORM": {
+    "FIRST_NAME": "पहला नाम",
+    "FIRST_NAME_PLACEHOLDER": "उदा. राहुल",
+    "MIDDLE_NAME": "मध्य नाम",
+    "MIDDLE_NAME_PLACEHOLDER": "उदा. अमित",
+    "SURNAME": "उपनाम",
+    "SURNAME_PLACEHOLDER": "उदा. शर्मा",
+    "EMAIL": "ईमेल",
+    "MOBILE": "मोबाइल नंबर",
+    "PERSONAL_DETAILS": "व्यक्तिगत विवरण",
+    "CONTACT_DETAILS": "संपर्क विवरण",
+    "SECURITY": "सुरक्षा",
+    "PASSWORD_HINT": "अक्षरों, अंकों और प्रतीकों का उपयोग करें",
+    "PASSWORD_PLACEHOLDER": "कम से कम 6 अक्षर",
+    "FIRST_NAME_ERROR": "पहला नाम आवश्यक है",
+    "SURNAME_ERROR": "उपनाम आवश्यक है",
+    "EMAIL_ERROR": "कृपया एक वैध ईमेल पता दर्ज करें",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "अपना पासवर्ड दोबारा दर्ज करें",
+    "PASSWORD_ERROR": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+    "REGISTER_BUTTON_TEXT": "खाता बनाएं",
+    "REGISTERING_BUTTON_TEXT": "खाता बनाया जा रहा है...",
+    "OPTIONAL": "वैकल्पिक"
   },
   "PWD": {
     "REGISTRATION_TITLE": "दिव्यांग पंजीकरण",
@@ -98,5 +183,47 @@
     "CLEAR": "साफ करें",
     "SUBMIT": "जमा करें",
     "RESET": "रीसेट"
+  },
+  "FOOTER": {
+    "BRAND": "आधार संस्था",
+    "DESCRIPTION": "दिव्यांग व्यक्तियों को व्यापक सहायता, कौशल विकास और समावेशी कार्यक्रमों के माध्यम से सशक्त बनाना।",
+
+    "QUICK_LINKS": "त्वरित लिंक",
+
+    "LINKS": {
+      "PROGRAMS": "कार्यक्रम",
+      "SCHEMES": "सरकारी योजनाएँ",
+      "PWD_REGISTER": "दिव्यांग पंजीकरण",
+      "SIGN_IN": "लॉगिन",
+      "CREATE_ACCOUNT": "खाता बनाएं"
+    },
+
+    "LEGAL": "कानूनी",
+
+    "LEGAL_LINKS": {
+      "TERMS": "सेवा की शर्तें",
+      "PRIVACY": "गोपनीयता नीति",
+      "ACCESSIBILITY": "सुगम्यता वक्तव्य",
+      "GRIEVANCE": "शिकायत निवारण"
+    },
+
+    "CONTACT": "संपर्क करें",
+
+    "ADDRESS": "मुंबई, महाराष्ट्र, भारत",
+    "PHONE": "+91 123 456 7890",
+    "EMAIL": "info@aadharsanstha.org",
+
+    "HOURS": "सोम–शनि, सुबह 9 बजे – शाम 6 बजे",
+
+    "COPYRIGHT": "आधार संस्था। सर्वाधिकार सुरक्षित।",
+
+    "BADGES": {
+      "GOVT": "सरकार द्वारा पंजीकृत",
+      "ACCESSIBILITY": "WCAG 2.1 AA",
+      "PAN_INDIA": "पूरे भारत में"
+    },
+
+    "MADE_WITH": "प्रेम से बनाया गया",
+    "INCLUSION": "समावेशन के लिए"
   }
-} 
+}

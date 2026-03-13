@@ -1,63 +1,381 @@
-<nav class="navbar p-3 bg-primary text-white">
-  <div class="container">
-    <div class="flex align-items-center justify-content-between">
-      <!-- Logo and Brand -->
-      <div class="flex align-items-center">
-        <a routerLink="/" class="text-white text-xl font-bold no-underline">
-          <i class="pi pi-heart mr-2"></i>
-          Aadhar Sanstha
+<header role="banner">
+  <!-- WCAG 3.2.2 — screen reader announcement for language changes -->
+  <span aria-live="polite" aria-atomic="true" class="sr-only">{{
+    languageChangeAnnouncement
+  }}</span>
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="nav-inner">
+      <!-- ── Brand ── -->
+      <a
+        href="/"
+        routerLink="/"
+        class="nav-brand"
+        aria-label="Aadhar Sanstha - Go to homepage"
+      >
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"
+            />
+          </svg>
+        </span>
+        <span class="brand-name">Aadhar Sanstha</span>
+      </a>
+
+      <!-- ── Desktop Nav Links ── -->
+      <div class="nav-links" role="list" aria-label="Navigation links">
+        <a
+          href="/programs"
+          routerLink="/programs"
+          routerLinkActive="active"
+          class="nav-link"
+          role="listitem"
+        >
+          {{ "NAV.PROGRAMS" | translate }}
+        </a>
+        <a
+          href="/schemes"
+          routerLink="/schemes"
+          routerLinkActive="active"
+          class="nav-link"
+          role="listitem"
+        >
+          {{ "NAV.SCHEMES" | translate }}
+        </a>
+        <a
+          href="/pwd/register"
+          routerLink="/pwd/register"
+          routerLinkActive="active"
+          class="nav-link"
+          role="listitem"
+        >
+          {{ "NAV.PWD_REGISTRATION" | translate }}
+        </a>
+        <a
+          href="/admin"
+          routerLink="/admin"
+          routerLinkActive="active"
+          class="nav-link"
+          role="listitem"
+          *ngIf="currentUser?.role_name === 'admin'"
+        >
+          {{ "NAV.ADMIN" | translate }}
         </a>
       </div>
 
-      <!-- Navigation Links -->
-      <div class="hidden md:flex align-items-center gap-4">
-        <a routerLink="/programs" class="text-white no-underline hover:text-blue-200">
-          {{ 'NAV.PROGRAMS' | translate }}
-        </a>
-        <a routerLink="/schemes" class="text-white no-underline hover:text-blue-200">
-          {{ 'NAV.SCHEMES' | translate }}
-        </a>
-        <a routerLink="/pwd/register" class="text-white no-underline hover:text-blue-200">
-          {{ 'NAV.PWD_REGISTRATION' | translate }}
-        </a>
-        <!-- <a routerLink="/admin" class="text-white no-underline hover:text-blue-200" *ngIf="(currentUser$ | async)">
-          {{ 'NAV.ADMIN' | translate }}
-        </a> -->
-      </div>
-
-      <!-- Right Side Controls -->
-      <div class="flex align-items-center gap-3">
-        <!-- Accessibility Controls -->
-        <div class="flex align-items-center gap-2">
-          <p-button icon="pi pi-plus" size="small" severity="secondary" (onClick)="increaseFontSize()"
-            [attr.aria-label]="'Increase font size'">
-          </p-button>
-          <p-button icon="pi pi-minus" size="small" severity="secondary" (onClick)="decreaseFontSize()"
-            [attr.aria-label]="'Decrease font size'">
-          </p-button>
-          <p-button icon="pi pi-adjust" size="small" severity="secondary" (onClick)="toggleHighContrast()"
-            [attr.aria-label]="'Toggle high contrast'">
-          </p-button>
+      <!-- ── Right Controls ── -->
+      <div class="nav-controls">
+        <!-- Accessibility Controls — desktop only -->
+        <div
+          class="a11y-controls"
+          role="group"
+          aria-label="Accessibility controls"
+        >
+          <button
+            class="a11y-btn"
+            (click)="increaseFontSize()"
+            aria-label="Increase font size"
+            title="Increase font size"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+          <button
+            class="a11y-btn"
+            (click)="decreaseFontSize()"
+            aria-label="Decrease font size"
+            title="Decrease font size"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+          <button
+            class="a11y-btn"
+            (click)="toggleHighContrast()"
+            [attr.aria-pressed]="isHighContrast"
+            aria-label="Toggle high contrast mode"
+            title="Toggle high contrast"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3v18" />
+              <path
+                d="M12 3a9 9 0 0 1 0 18z"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+          </button>
         </div>
 
-        <!-- Language Switcher -->
-        <p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" (onChange)="onLanguageChange($event.value)"
-          optionLabel="label" placeholder="Language" styleClass="w-8rem">
-        </p-dropdown>
+        <!-- Divider — desktop only -->
+        <div class="nav-divider" aria-hidden="true"></div>
 
-        <!-- User Menu -->
-        <!-- <div *ngIf="currentUser$ | async as user; else loginButton">
-          <p-button type="button" styleClass="p-button-text text-white" (click)="signOut()">
-            <i class="pi pi-user mr-2"></i>
-            {{ user.email }}
-          </p-button>
-        </div> -->
+        <!-- Language Switcher — desktop only -->
+        <div class="lang-dropdown-wrap">
+          <p-dropdown
+            [options]="languages"
+            [(ngModel)]="selectedLanguage"
+            (onChange)="onLanguageChange($event.value)"
+            optionLabel="label"
+            placeholder="Language"
+            styleClass="lang-dropdown"
+            aria-label="Select language"
+          ></p-dropdown>
+        </div>
+
+        <!-- Divider — desktop only -->
+        <div class="nav-divider" aria-hidden="true"></div>
+
+        <!-- User / Login — always visible -->
+        <div
+          class="user-area"
+          *ngIf="currentUser$ | async as user; else loginButton"
+        >
+          <div class="user-greeting" aria-live="polite">
+            <span class="user-avatar" aria-hidden="true">
+              {{ currentUser?.first_name?.charAt(0)
+              }}{{ currentUser?.last_name?.charAt(0) }}
+            </span>
+            <span class="user-name">
+              {{ currentUser?.first_name }} {{ currentUser?.last_name }}
+            </span>
+          </div>
+          <button
+            class="signout-btn"
+            (click)="signOut()"
+            aria-label="Sign out of your account"
+          >
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span class="signout-label">Sign Out</span>
+          </button>
+        </div>
 
         <ng-template #loginButton>
-          <p-button routerLink="/auth/login" label="{{ 'NAV.LOGIN' | translate }}" styleClass="p-button-outlined">
-          </p-button>
+          <a
+            href="/auth/login"
+            routerLink="/auth/login"
+            class="login-btn"
+            aria-label="Login to your account"
+          >
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="login-label">{{ "NAV.LOGIN" | translate }}</span>
+          </a>
         </ng-template>
       </div>
+
+      <!-- ── Mobile Hamburger ── -->
+      <button
+        class="hamburger"
+        (click)="mobileOpen = !mobileOpen"
+        [attr.aria-expanded]="mobileOpen"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="ham-line" [class.open]="mobileOpen"></span>
+        <span class="ham-line" [class.open]="mobileOpen"></span>
+        <span class="ham-line" [class.open]="mobileOpen"></span>
+      </button>
     </div>
-  </div>
-</nav>
+
+    <!-- ── Mobile Menu ── -->
+    <div
+      id="mobile-menu"
+      class="mobile-menu"
+      [class.mobile-menu--open]="mobileOpen"
+      role="navigation"
+      aria-label="Mobile navigation"
+    >
+      <a
+        href="/programs"
+        routerLink="/programs"
+        routerLinkActive="active"
+        class="mobile-link"
+        (click)="mobileOpen = false"
+      >
+        {{ "NAV.PROGRAMS" | translate }}
+      </a>
+      <a
+        href="/schemes"
+        routerLink="/schemes"
+        routerLinkActive="active"
+        class="mobile-link"
+        (click)="mobileOpen = false"
+      >
+        {{ "NAV.SCHEMES" | translate }}
+      </a>
+      <a
+        href="/pwd/register"
+        routerLink="/pwd/register"
+        routerLinkActive="active"
+        class="mobile-link"
+        (click)="mobileOpen = false"
+      >
+        {{ "NAV.PWD_REGISTRATION" | translate }}
+      </a>
+      <a
+        href="/admin"
+        routerLink="/admin"
+        routerLinkActive="active"
+        class="mobile-link"
+        (click)="mobileOpen = false"
+        *ngIf="currentUser?.role_name === 'admin'"
+      >
+        {{ "NAV.ADMIN" | translate }}
+      </a>
+
+      <div class="mobile-divider" aria-hidden="true"></div>
+
+      <!-- Accessibility + Language in mobile menu -->
+      <div class="mobile-controls">
+        <span class="mobile-controls-label">Accessibility</span>
+        <div class="mobile-a11y">
+          <button
+            class="a11y-btn"
+            (click)="increaseFontSize()"
+            aria-label="Increase font size"
+            title="Increase font size"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Text +</span>
+          </button>
+          <button
+            class="a11y-btn"
+            (click)="decreaseFontSize()"
+            aria-label="Decrease font size"
+            title="Decrease font size"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Text −</span>
+          </button>
+          <button
+            class="a11y-btn"
+            (click)="toggleHighContrast()"
+            aria-label="Toggle high contrast"
+            title="Toggle high contrast"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3v18" />
+              <path
+                d="M12 3a9 9 0 0 1 0 18z"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+            <span>Contrast</span>
+          </button>
+        </div>
+        <p-dropdown
+          [options]="languages"
+          [(ngModel)]="selectedLanguage"
+          (onChange)="onLanguageChange($event.value)"
+          optionLabel="label"
+          placeholder="Language"
+          styleClass="lang-dropdown lang-dropdown--mobile"
+          aria-label="Select language"
+        ></p-dropdown>
+      </div>
+
+      <div class="mobile-divider" aria-hidden="true"></div>
+
+      <a
+        href="/auth/login"
+        routerLink="/auth/login"
+        class="mobile-link mobile-link--cta"
+        (click)="mobileOpen = false"
+        *ngIf="!(currentUser$ | async)"
+      >
+        Login
+      </a>
+    </div>
+  </nav>
+</header>

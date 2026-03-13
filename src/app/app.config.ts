@@ -6,6 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { SUPABASE_PROVIDERS } from './core/services/supabase-init';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
       TranslateModule.forRoot({
         fallbackLang: 'en'
       })
-    )
+    ),
+        ...SUPABASE_PROVIDERS   // 👈 Supabase is initialized here
   ]
 };

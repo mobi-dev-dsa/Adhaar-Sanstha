@@ -1,69 +1,281 @@
 <div class="login-container">
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-grid"></div>
+  </div>
+
   <div class="login-wrapper">
-    <p-card styleClass="login-card">
-      <ng-template pTemplate="header">
-        <div class="text-center p-4">
-          <h1 class="text-2xl font-bold text-primary">Welcome Back</h1>
-          <p class="text-gray-600 mt-2">Sign in to your account</p>
-        </div>
-      </ng-template>
+    <main
+      class="form-panel"
+      id="main-content"
+      role="main"
+      aria-labelledby="login-heading"
+      tabindex="-1"
+    >
+      <header class="form-header">
+        <h1 id="login-heading">{{ "AUTH.LOGIN_TITLE" | translate }}</h1>
+        <p>{{ "AUTH.LOGIN_SUBTITLE" | translate }}</p>
+      </header>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-4">
-        <div class="field mb-4">
-          <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <input 
-            id="email"
-            type="email" 
-            pInputText 
-            formControlName="email"
-            placeholder="Enter your email"
-            class="w-full"
-            [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          <small 
-            class="text-red-500" 
-            *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            Please enter a valid email address
-          </small>
+      <!-- Server error -->
+      <div
+        *ngIf="serverError"
+        class="server-error"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ serverError }}
+      </div>
+
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        class="login-form"
+        [attr.aria-label]="'AUTH.SIGN_IN' | translate"
+      >
+        <!-- Email -->
+        <div
+          class="field"
+          [class.field--error]="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+        >
+          <label for="email" class="field-label">
+            {{ "AUTH.EMAIL" | translate }}
+            <span class="req-star">*</span>
+          </label>
+
+          <div class="input-wrap">
+            <svg
+              class="input-ico"
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m2 7 10 7 10-7" />
+            </svg>
+
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="jane@example.com"
+              class="field-input field-input--icon"
+              autocomplete="email"
+              aria-required="true"
+              [attr.aria-invalid]="
+                (loginForm.get('email')?.invalid &&
+                  loginForm.get('email')?.touched) ||
+                null
+              "
+              aria-describedby="err-email"
+            />
+          </div>
+
+          <span
+            id="err-email"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+
+            {{ "AUTH.ERRORS.INVALID_EMAIL" | translate }}
+          </span>
         </div>
 
-        <div class="field mb-4">
-          <label for="password" class="block text-sm font-medium mb-2">Password</label>
-          <p-password 
-            id="password"
+        <!-- Password -->
+        <div
+          class="field"
+          [class.field--error]="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+        >
+          <div class="label-row">
+            <label for="password" class="field-label">
+              {{ "AUTH.PASSWORD" | translate }}
+              <span class="req-star">*</span>
+            </label>
+
+            <a routerLink="/auth/forgot-password" class="forgot-link">
+              {{ "AUTH.FORGOT_PASSWORD" | translate }}
+            </a>
+          </div>
+
+          <p-password
+            inputId="password"
             formControlName="password"
-            placeholder="Enter your password"
+            placeholder="{{ 'AUTH.PASSWORD_PLACEHOLDER' | translate }}"
             [toggleMask]="true"
             [feedback]="false"
-            class="w-full">
-          </p-password>
-          <small 
-            class="text-red-500" 
-            *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            Password must be at least 6 characters
-          </small>
+            [inputStyleClass]="'field-input'"
+            [style]="{ width: '100%' }"
+            aria-required="true"
+            aria-describedby="err-password"
+            [attr.aria-invalid]="
+              (loginForm.get('password')?.invalid &&
+                loginForm.get('password')?.touched) ||
+              null
+            "
+          ></p-password>
+
+          <span
+            id="err-password"
+            class="field-error"
+            role="alert"
+            *ngIf="
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+            "
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+
+            {{ "AUTH.ERRORS.PASSWORD_REQUIRED" | translate }}
+          </span>
         </div>
 
-        <p-button 
-          type="submit"
-          label="Sign In"
-          [loading]="loading"
-          [disabled]="loginForm.invalid || loading"
-          class="w-full mb-3">
-        </p-button>
+        <!-- Resend email -->
+        <div class="resend-block" *ngIf="showResendEmail" role="region">
+          <p class="resend-text">
+            {{ "AUTH.RESEND_PROMPT" | translate }}
+          </p>
 
-        <p-divider></p-divider>
+          <button
+            type="button"
+            class="resend-btn"
+            (click)="resendConfirmation()"
+            [disabled]="loading || sendingEmail"
+          >
+            <svg
+              *ngIf="sendingEmail"
+              class="spin"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="2.5"
+                fill="none"
+                stroke-dasharray="31.4"
+                stroke-dashoffset="8"
+              />
+            </svg>
 
-        <div class="text-center mt-4">
-          <p class="text-gray-600">
-            Don't have an account? 
-            <a routerLink="/auth/register" class="text-primary font-medium no-underline">
-              Sign up here
+            {{
+              sendingEmail
+                ? ("AUTH.SENDING" | translate)
+                : ("AUTH.RESEND_VERIFICATION" | translate)
+            }}
+          </button>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-footer">
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="loginForm.invalid || loading"
+          >
+            <svg
+              *ngIf="loading"
+              class="spin"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="white"
+                stroke-width="2.5"
+                fill="none"
+                stroke-dasharray="31.4"
+                stroke-dashoffset="8"
+              />
+            </svg>
+
+            <span>
+              {{
+                loading
+                  ? ("AUTH.SIGNING_IN" | translate)
+                  : ("AUTH.SIGN_IN" | translate)
+              }}
+            </span>
+
+            <svg
+              *ngIf="!loading"
+              class="btn-arrow"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <p class="signup-prompt">
+            {{ "AUTH.NO_ACCOUNT" | translate }}
+            <a routerLink="/auth/register" class="signup-link">
+              {{ "AUTH.SIGN_UP_HERE" | translate }}
             </a>
           </p>
         </div>
       </form>
-    </p-card>
+    </main>
   </div>
 
   <p-toast></p-toast>
-</div> 
+</div>

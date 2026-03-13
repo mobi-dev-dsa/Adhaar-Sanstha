@@ -1,38 +1,568 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,700&display=swap");
+
+:host {
+  --brand: #4f46e5;
+  --brand-dark: #3730a3;
+  --brand-mid: #818cf8;
+  --brand-light: #eef2ff;
+  --nav-bg: #4f46e5;
+  --nav-height: 52px; // compact on mobile
+  --text-on-dark: #ffffff;
+  --text-muted-on-dark: rgba(255, 255, 255, 0.9);
+  --border-on-dark: rgba(255, 255, 255, 0.15);
+  --t: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (min-width: 900px) {
+    --nav-height: 62px; // full height on desktop
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// ── Navbar shell ──────────────────────────────────────────────────────────────
 .navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 50%, #6366f1 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 4px 20px rgba(67, 56, 202, 0.4),
+    0 1px 4px rgba(0, 0, 0, 0.12);
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+// ── Inner row ─────────────────────────────────────────────────────────────────
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: var(--nav-height);
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 0.75rem;
+
+  @media (min-width: 600px) {
+    padding: 0 1.5rem;
   }
-  
-  a {
-    transition: color 0.3s ease;
-    
+}
+
+// ── Brand ─────────────────────────────────────────────────────────────────────
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  flex-shrink: 0;
+  margin-right: auto; // push controls to right naturally on mobile
+
+  @media (min-width: 900px) {
+    margin-right: 2rem;
+  } // desktop: fixed gap before nav links
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  flex-shrink: 0;
+  transition: background var(--t);
+
+  .nav-brand:hover & {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.brand-name {
+  font-family: "Fraunces", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-on-dark);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+// ── Nav links ─────────────────────────────────────────────────────────────────
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+
+  @media (min-width: 900px) {
+    display: flex;
+  }
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted-on-dark);
+  text-decoration: none;
+  border-radius: 7px;
+  transition:
+    color var(--t),
+    background var(--t);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--text-on-dark);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+    color: var(--text-on-dark);
+  }
+}
+
+// Active state — use :host-context or direct class since Angular adds it to the element
+:host ::ng-deep .nav-link.active,
+.nav-link.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+// ── Right controls ────────────────────────────────────────────────────────────
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  // Do NOT margin-left: auto here — brand handles it via margin-right: auto
+
+  @media (min-width: 600px) {
+    gap: 0.5rem;
+  }
+}
+
+// Hide these entirely on mobile — they move into mobile menu or are deprioritised
+.a11y-controls,
+.nav-divider,
+.lang-dropdown-wrap {
+  display: none;
+
+  @media (min-width: 900px) {
+    display: flex;
+  }
+}
+
+// Language wrapper needs flex for alignment
+.lang-dropdown-wrap {
+  align-items: center;
+}
+
+// ── Divider ───────────────────────────────────────────────────────────────────
+.nav-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border-on-dark);
+  flex-shrink: 0;
+}
+
+// ── Accessibility buttons ─────────────────────────────────────────────────────
+.a11y-controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.a11y-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-on-dark);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-on-dark);
+  cursor: pointer;
+  transition:
+    background var(--t),
+    border-color var(--t),
+    transform var(--t);
+  font-family: inherit;
+
+  @media (min-width: 900px) {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+    border-radius: 7px;
+  }
+}
+
+// ── Language dropdown overrides ───────────────────────────────────────────────
+::ng-deep .lang-dropdown {
+  &.p-dropdown {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-on-dark);
+    border-radius: 7px;
+    height: 32px;
+    min-width: 6.5rem;
+    transition: background var(--t);
+
     &:hover {
-      text-decoration: none;
+      background: rgba(255, 255, 255, 0.18);
     }
-  }
-  
-  .p-dropdown {
+    &:focus,
+    &.p-focus {
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+      outline: none;
+    }
+
+    .p-dropdown-label {
+      color: var(--text-on-dark);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 0 0.6rem;
+      line-height: 30px;
+    }
+
     .p-dropdown-trigger {
-      color: white;
+      color: var(--text-muted-on-dark);
+      width: 1.8rem;
     }
-  }
-  
-  .p-button.p-button-text {
-    color: white;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
+
+    .p-dropdown-trigger-icon {
+      font-size: 0.75rem;
     }
   }
 }
 
-@media (max-width: 768px) {
-  .navbar {
-    .hidden {
-      display: none;
+// ── User area ─────────────────────────────────────────────────────────────────
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.signout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 0.85rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-on-dark);
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    background var(--t),
+    border-color var(--t);
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+// ── Login button ──────────────────────────────────────────────────────────────
+.login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 0.75rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brand);
+  background: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition:
+    background var(--t),
+    transform var(--t),
+    box-shadow var(--t);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+
+  @media (min-width: 900px) {
+    height: 34px;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+  }
+
+  &:hover {
+    background: #f5f5ff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+}
+
+// ── Hamburger button ──────────────────────────────────────────────────────────
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-on-dark);
+  border-radius: 7px;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background var(--t);
+
+  @media (min-width: 900px) {
+    display: none;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+.ham-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+
+  &:nth-child(1).open {
+    transform: translateY(7px) rotate(45deg);
+  }
+  &:nth-child(2).open {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  &:nth-child(3).open {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+// ── Mobile menu ───────────────────────────────────────────────────────────────
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  background: #3730a3;
+  border-top: 1px solid var(--border-on-dark);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (min-width: 900px) {
+    display: none;
+  }
+
+  // When open: give enough height for content + dropdown panel
+  // overflow must be visible so the p-dropdown panel can escape the container
+  &--open {
+    max-height: 600px;
+    overflow: visible; // allows dropdown panel to render outside bounds
+  }
+}
+
+.mobile-link {
+  display: block;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted-on-dark);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition:
+    color var(--t),
+    background var(--t);
+
+  &:hover,
+  &.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  &.active {
+    font-weight: 700;
+    border-left: 3px solid rgba(255, 255, 255, 0.6);
+    padding-left: calc(1.5rem - 3px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: -4px;
+  }
+
+  &--cta {
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+  }
+}
+
+.mobile-divider {
+  height: 1px;
+  background: var(--border-on-dark);
+  margin: 0.25rem 0;
+}
+
+// Hide text label on very small screens, keep icon
+@media (max-width: 420px) {
+  .login-label,
+  .signout-label,
+  .user-name {
+    display: none;
+  }
+
+  .login-btn {
+    padding: 0 0.6rem;
+  }
+  .signout-btn {
+    padding: 0 0.6rem;
+  }
+}
+
+// ── Mobile controls (a11y + language inside mobile menu) ──────────────────────
+.mobile-controls {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-controls-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.mobile-a11y {
+  display: flex;
+  gap: 0.5rem;
+
+  .a11y-btn {
+    flex: 1;
+    height: 36px;
+    gap: 5px;
+    font-size: 0.78rem;
+    width: auto;
+
+    span {
+      font-size: 0.78rem;
+      font-weight: 500;
     }
   }
-} 
+}
+
+::ng-deep .lang-dropdown--mobile {
+  &.p-dropdown {
+    width: 100% !important;
+    min-width: unset;
+  }
+}
+// ── Reduced motion ─────────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
